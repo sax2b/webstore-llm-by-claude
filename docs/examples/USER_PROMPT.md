@@ -89,28 +89,34 @@ Execute this workflow on initial application loading after the Session Managemen
   - No buttons should be rendered on the card surface itself.
 - **Data mapping**:
   - `image`: Render product image.
-  - `name` or `title`: Render product name string.
-  - `price`: Map from `price` integer stored in cents. Format dynamically to standard decimal currency (e.g. `1000` cents -> `$10.00`). Include `currency` symbol.
+  - `name` or `title`: Render product name string. Consider `title` first. If `title` does not exist, use `name` as product name.
+  - `price`: Map from `price` integer stored in cents. Format dynamically to standard decimal currency (e.g. `1000` with USD currency -> `$10.00`, `1000` with THB currency -> `฿10.00`).
   - `description`: Render a short preview snippet of the product description.
+  - `available`: Render a string 'Not Available' with a prominent color background at the footer of a product image if `available` is 0.
+  - `state`: Render a prominent badge on the top-right corner of a product image with message 'Coming Soon' if state exists and state value is `inactive`.
 - **Side Effect & Action**:
   - On user click interation, execute the following sequence:
     - Step A: Data Fetching
       - Trigger a Guest API call to ferch product full detail: `GET /shops/{shop_id}/products/{product_id}`
-     - Step B: Modal Presentation
+    - Step B: Modal Presentation
       - Open the data inside a large overlay modal.
       - **Layout Constraints**:
         - All visual elements in the modal must remain fixed/static in height.
         - **Exception**: `description` field container must have overflow scrolling enabled across all platforms.
-      - Step C: Quantity Selector Row.
+    - Step C: Quantity Selector Row
         - Render an inline row containing three interactive elements
           - `[-]` Button: Decrements item quantity.
           - `[Quantity Counter]`: Display current local count state. Allow user to update count directly.
           - `[+] Button`: Increments item quantity.
-      - Step D: Add-To-Cart Action
+    - Step D: Add-To-Cart Action
         - Render an `[Add to Cart]` button positioned specifically for easy bottom thumb access on mobile viewports.
         - **Side Effect & Action:**
-            - On button click, trigger an API call to update cart contents: `POST /shops/{shop_id}/carts/current/contents`.
-            - API Endpoint depends on the acive user authorization (Guest or customer/registered user).
+            - On button click interaction, check `state` and `available` of product
+            - **Conditions**:
+              - If `state` is 'inactive' or `available is equal to 0`, disable this button.
+              - If (`state` does not exist or `state` is active) and `available` is greater than 0,
+                - Trigger an API call to update cart contents: `POST /shops/{shop_id}/carts/current/contents`.
+                - API Endpoint depends on the acive user authorization (Guest or customer/registered user).
 
 ### NAVBAR
 UI Layout:
@@ -122,8 +128,8 @@ UI Layout:
   - **Language Selector Component**:
     - **Data Source**: Fetch list of options from `supported_languages` in shop config.
     - **UI State & Format**:
-      - Render as a dropdown selector.
-      - Display the active language as a capitalized 2-letter ISO code (e.g., `TH` for Thai, `EN` for English) including option languages display.
+      - Render as a dropdown selector and the active language as a capitalized 2-letter ISO code (e.g., `TH` for Thai or th-TH, `EN` for English or en-US).
+      - Render dropdown options as a capitalized 2-letter ISO code. 
     - **Side Effect / Action**:
       - On user selection, update `lang` key in localStorage with the new value.
       - Trigger application translation context refresh.
@@ -134,7 +140,7 @@ UI Layout:
       - Render a clickable button with a notification badge showing the total count of items
     - **Side Effect / Action**:
       - On user clicking, redirect the user router to `/cart` page.
-      - **IMPORTANT**: Disable button if cart page do not appear in `WEB PAGES`
+      - **LAYOUT CONSTRAINT**: No action for the cart button if cart page do not appear in `WEB PAGES` below.
 
 ### WEB PAGES
 **Page 1 - LANDING PAGE**
@@ -180,6 +186,7 @@ COMPONENT STRUCTURE:
 - src/index.css - Include brand fonts, custom shadows/effects, and base styling
 - src/App.tsx - Should ONLY render the requested component (e.g., just <PricingPage /> if user wants pricing)
 - src/components/[RequestedComponent].tsx - The actual component fulfilling the user's request
+- src/api/api.ts - Include API integrations
 
 TECHNICAL REQUIREMENTS:
 - Create a WORKING, self-contained application

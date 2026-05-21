@@ -1,0 +1,1153 @@
+openapi: 3.0.3
+info:
+  title: E-Commerce UI Integration API (Guest)
+  version: 1.1.0
+  description: >
+    API Specification for UI integration. This document defines endpoints specifically 
+    for Guest flows, enabling anonymous visitors to browse products, manage carts, 
+    and complete the checkout process.
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >
+        Use the JWT token obtained from the guest initialization endpoint. 
+        Include this token in the 'Authorization' header as 'Bearer <token>'.
+
+  schemas:
+    GenericResponse:
+      type: object
+      description: Base response envelope for all API responses.
+      properties:
+        code:
+          type: string
+          description: Internal status code. "000000" indicates success.
+        success:
+          type: boolean
+          description: Indicates if the operation was successful.
+        results:
+          type: object
+          description: The actual data payload returned by the endpoint.
+
+    # --- Authentication & Shop Data ---
+    AuthTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/GenericResponse'
+        - type: object
+          description: Response containing the guest authentication token.
+          properties:
+            results:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: The JWT token used to authorize subsequent guest requests.
+
+    ShopConfigResponse:
+      allOf:
+        - $ref: '#/components/schemas/GenericResponse'
+        - type: object
+          description: Response containing the shop's public configuration.
+          properties:
+            results:
+              $ref: '#/components/schemas/ShopConfig'
+
+    ShopConfig:
+      type: object
+      description: Public configuration and visual layout settings for the shop.
+      properties:
+        default_currency:
+          type: string
+          description: The default three-letter ISO currency code (e.g., "THB").
+        default_language:
+          type: string
+          description: The default language code (e.g., "th-TH").
+        name:
+          type: string
+          description: The display name of the shop.
+        shop_image:
+          type: string
+          format: uri
+          description: Absolute URL to the shop's primary image or logo.
+        storefront:
+          type: string
+          description: A JSON string defining the UI layout and components for the shop's storefront.
+        storefront_background_image_url:
+          type: string
+          format: uri
+          description: Absolute URL to the background image for the storefront.
+        supported_languages:
+          type: array
+          items:
+            type: string
+          description: A list of language codes supported by the shop.
+
+    # --- Product Data ---
+    ProductListResponse:
+      allOf:
+        - $ref: '#/components/schemas/GenericResponse'
+        - type: object
+          description: Response containing a list of products.
+          properties:
+            results:
+              type: object
+              properties:
+                products:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Product'
+                  description: Array of product details.
+                count:
+                  type: integer
+                  description: Total number of products found.
+
+    GetProductResponse:
+      allOf:
+        - $ref: '#/components/schemas/GenericResponse'
+        - type: object
+          description: Response containing the detailed product information.
+          properties:
+            results:
+              $ref: '#/components/schemas/Product'
+
+    Product:
+      type: object
+      description: Detailed information about a product available in the shop.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the product.
+        shop_id:
+          type: string
+          description: Identifier of the shop this product belongs to.
+        state:
+          type: string
+          enum: [active, inactive, out_of_stock]
+          description: The current availability state of the product.
+        title:
+          type: string
+          description: Display title of the product.
+        name:
+          type: string
+          description: Internal or specific name of the product.
+        type:
+          type: string
+          enum: [digital, physical, bundle]
+          description: The category or type of the product.
+        description:
+          type: string
+          description: Comprehensive description of the product.
+        description_format:
+          type: string
+          description: The format of the description text (e.g., "html").
+        price:
+          type: integer
+          description: Unit price in the smallest currency unit.
+        list_price:
+          type: integer
+          description: Original or reference price in the smallest currency unit.
+        currency:
+          type: string
+          description: Three-letter ISO currency code.
+        image:
+          type: string
+          format: uri
+          description: Absolute URL to the product's primary image.
+        additional_images:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: List of URLs for additional product images.
+        sku:
+          type: string
+          description: Stock Keeping Unit identifier.
+        priority:
+          type: integer
+          description: Sorting priority for display purposes.
+        category:
+          type: string
+          description: Primary category the product belongs to.
+        hidden:
+          type: boolean
+          description: Indicates if the product should be hidden from public listings.
+        hidden_in_pos:
+          type: boolean
+          description: Indicates if the product should be hidden from POS interfaces.
+        stock:
+          type: object
+          description: Information about product stock levels.
+          properties:
+            enable_stock:
+              type: boolean
+              description: Indicates if stock management is enabled.
+            quantity:
+              type: integer
+              description: Current number of items available in stock.
+            hide_stock:
+              type: boolean
+              description: Indicates if the exact stock quantity should be hidden from users.
+        available:
+          type: integer
+          description: Number of items currently available for purchase.
+        sold:
+          type: integer
+          description: Total number of items sold.
+        bundle:
+          type: array
+          description: List of products included if this is a bundle product.
+          items:
+            type: object
+            properties:
+              product_id:
+                type: string
+                description: Identifier of the included product.
+              amount:
+                type: integer
+                description: Quantity of the product included in the bundle.
+        purchase_condition:
+          type: object
+          description: Rules and restrictions for purchasing this product.
+          properties:
+            min_amount:
+              type: integer
+              description: Minimum quantity required per order.
+            max_amount:
+              type: integer
+              description: Maximum quantity allowed per order.
+        redirect_url:
+          type: string
+          format: uri
+          nullable: true
+          description: URL to redirect the user to for external purchases, if applicable.
+
+    # --- Cart Data ---
+    CartResponse:
+      allOf:
+        - $ref: '#/components/schemas/GenericResponse'
+        - type: object
+          description: Response containing the current shopping cart details.
+          properties:
+            results:
+              type: object
+              properties:
+                shopping_cart:
+                  $ref: '#/components/schemas/ShoppingCart'
+
+    ShoppingCart:
+      type: object
+      description: Detailed information about the visitor's shopping cart.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the cart.
+        shop_id:
+          type: string
+          description: Identifier of the shop this cart belongs to.
+        created_by:
+          type: string
+          description: Identifier of the session that created the cart.
+        created_on:
+          type: integer
+          description: Unix timestamp (seconds) when the cart was created.
+        edited_by:
+          type: string
+          description: Identifier of the session that last modified the cart.
+        edited_on:
+          type: integer
+          description: Unix timestamp (seconds) when the cart was last modified.
+        request_ip:
+          type: string
+          description: IP address from which the cart was accessed.
+        request_country:
+          type: string
+          description: ISO country code detected for the request.
+        state:
+          type: string
+          description: The current lifecycle state of the cart.
+        customer_id:
+          type: string
+          description: Unique identifier for the guest customer.
+        customer_platform:
+          type: string
+          description: The platform or source of the customer.
+        customer_type: 
+          type: string
+          enum: [botio_guest]
+          description: The type of customer account.
+        cart_id:
+          type: string
+          description: Redundant identifier for the cart.
+        payment_authorize_url:
+          type: string
+          description: URL to redirect the guest for payment authorization.
+        payment_expire_on:
+          type: integer
+          description: Unix timestamp when the current payment session expires.
+        contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+          description: List of items currently in the cart.
+        currency:
+          type: string
+          description: Three-letter ISO currency code.
+        subtotal:
+          type: number
+          description: Total price of items before discounts and taxes.
+        discount:
+          type: number
+          description: Total discount amount applied to the cart.
+        nettotal:
+          type: number
+          description: Subtotal minus discounts.
+        vat:
+          type: number
+          description: Value Added Tax amount.
+        shipping:
+          type: number
+          description: Calculated shipping fee.
+        shipping_discount:
+          type: number
+          description: Discount applied specifically to shipping.
+        total:
+          type: number
+          description: Final total amount to be paid.
+        valid:
+          type: boolean
+          description: Indicates if the cart is ready for checkout.
+
+    CartItem:
+      type: object
+      description: Represents a specific product added to the cart.
+      properties:
+        product_id:
+          type: string
+          description: Unique identifier of the product.
+        shop_id:
+          type: string
+          description: Identifier of the shop.
+        inventory_type:
+          type: string
+          description: The type of inventory system managing this item.
+        inventory_id:
+          type: string
+          description: Specific inventory record identifier.
+        item_id:
+          type: string
+          description: Unique identifier for the item variant.
+        title:
+          type: string
+          description: Display title of the item.
+        name:
+          type: string
+          description: Specific name or variant details of the item.
+        type:
+          type: string
+          description: Category of the item.
+        sku:
+          type: string
+          description: Stock Keeping Unit identifier.
+        price:
+          type: integer
+          description: Unit price in the smallest currency unit.
+        list_price:
+          type: integer
+          description: Original unit price.
+        currency:
+          type: string
+          description: Currency code for the item.
+        image:
+          type: string
+          format: uri
+          description: Absolute URL to the item's image.
+        category:
+          type: string
+          description: Product category.
+        amount:
+          type: integer
+          description: Quantity of the item in the cart.
+
+    UpdateCartContentRequest:
+      type: object
+      description: Request payload for updating items in the cart.
+      required:
+        - product_id
+        - amount
+      properties:
+        product_id:
+          type: string
+          description: The unique identifier of the product to add or update.
+        amount:
+          type: integer
+          description: The target quantity for the item in the cart.
+
+    Address:
+      type: object
+      description: Detailed geographic and contact information for delivery or billing.
+      properties:
+        name:
+          type: string
+          description: Full name of the recipient or contact person.
+        telephone:
+          type: string
+          description: Contact phone number.
+        email:
+          type: string
+          description: Contact email address.
+        tax_id:
+          type: string
+          description: Tax identification number, if applicable.
+        tax_brance:
+          type: string
+          description: Tax branch identifier, if applicable.
+        street:
+          type: string
+          description: Primary street address information.
+        street2:
+          type: string
+          description: Secondary street or building details.
+        street3:
+          type: string
+          description: Additional address details.
+        zipcode:
+          type: string
+          description: Postal or ZIP code.
+        sub_city:
+          type: string
+          description: Sub-district or neighborhood.
+        city:
+          type: string
+          description: District or city name.
+        state:
+          type: string
+          description: Province, state, or region.
+        country:
+          type: string
+          description: Full country name.
+        lat:
+          type: string
+          description: Latitude coordinate.
+        long:
+          type: string
+          description: Longitude coordinate.
+
+    UpdateCartRequest:
+      type: object
+      description: Request payload for updating cart-level information like addresses and configs.
+      properties:
+        billing_address:
+          $ref: '#/components/schemas/Address'
+        shipping_address:
+          $ref: '#/components/schemas/Address'
+        shipping_config_id:
+          type: string
+          description: Identifier for the selected shipping configuration.
+        payment_config_id:
+          type: string
+          description: Identifier for the selected payment configuration.
+        shipping_id:
+          type: string
+          description: Specific identifier from the shipping provider configuration.
+        payment_id:
+          type: string
+          description: Specific identifier from the payment provider configuration.
+
+    # --- Order Data ---
+    GetOrderResponse:
+      allOf:
+        - $ref: '#/components/schemas/GenericResponse'
+        - type: object
+          description: Response containing the specific order details.
+          properties:
+            results:
+              type: object
+              properties:
+                order:
+                  $ref: '#/components/schemas/OrderExtra'
+
+    OrderExtra:
+      allOf:
+        - $ref: '#/components/schemas/Order'
+        - type: object
+          properties:
+            item_count:
+              type: integer
+              description: Total count of items included in the order.
+            customer_name:
+              type: string
+              description: Name of the customer who placed the order.
+
+    # --- Configuration Data ---
+    ShippingConfigListResponse:
+      allOf:
+        - $ref: '#/components/schemas/GenericResponse'
+        - type: object
+          description: Response containing a list of available shipping methods.
+          properties:
+            results:
+              type: object
+              properties:
+                shipping_configs:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ShippingConfig'
+                  description: Array of shipping configurations.
+                count:
+                  type: integer
+                  description: Total number of shipping methods available.
+
+    ShippingConfig:
+      type: object
+      description: Configuration details for a specific shipping method.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the shipping configuration.
+        created_by:
+          type: string
+          description: Identifier of the creator.
+        created_on:
+          type: integer
+          description: Creation timestamp.
+        edited_by:
+          type: string
+          description: Identifier of the last editor.
+        edited_on:
+          type: integer
+          description: Last modification timestamp.
+        shop_id:
+          type: string
+          description: Shop identifier.
+        name:
+          type: string
+          description: Display name of the shipping method.
+        description:
+          type: string
+          description: Detailed description of the shipping service.
+        shipping_provider:
+          type: string
+          description: The logistics provider name.
+        shipping_provider_id:
+          type: string
+          description: Provider-specific identifier.
+        shipping_fee_type:
+          type: string
+          description: The logic used to calculate fees (e.g., "fixed", "weight-based").
+        shipping_fee_conditions:
+          type: object
+          nullable: true
+          description: Rules and conditions for applying specific shipping fees.
+        shipping_fees:
+          type: array
+          items:
+            type: number
+          description: Array of fee values corresponding to defined conditions.
+        min_shipping_time:
+          type: integer
+          description: Minimum estimated delivery time in days.
+        max_shipping_time:
+          type: integer
+          description: Maximum estimated delivery time in days.
+        currency:
+          type: string
+          description: Currency code for the fees.
+        min_fee:
+          type: number
+          description: Minimum possible shipping fee.
+        max_fee:
+          type: number
+          description: Maximum possible shipping fee.
+        shipping_zones:
+          type: array
+          items:
+            type: object
+            properties:
+              zones:
+                type: array
+                items:
+                  type: string
+                description: List of geographic zones covered by this configuration.
+          description: Geographic areas where this shipping method is available.
+
+    PaymentConfigListResponse:
+      allOf:
+        - $ref: '#/components/schemas/GenericResponse'
+        - type: object
+          description: Response containing available payment methods.
+          properties:
+            results:
+              type: object
+              properties:
+                payment_configs:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PaymentConfig'
+                  description: Array of payment configurations.
+                count:
+                  type: integer
+                  description: Total number of payment methods available.
+
+    PaymentConfig:
+      type: object
+      description: Configuration details for a specific payment method.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the payment configuration.
+        created_by:
+          type: string
+          description: Identifier of the creator.
+        created_on:
+          type: integer
+          description: Creation timestamp.
+        edited_by:
+          type: string
+          description: Identifier of the last editor.
+        edited_on:
+          type: integer
+          description: Last modification timestamp.
+        shop_id:
+          type: string
+          description: Shop identifier.
+        name:
+          type: string
+          description: Display name of the payment method.
+        description:
+          type: string
+          description: Detailed description or instructions for the payment method.
+        payment_service:
+          type: string
+          description: The underlying payment service provider.
+        payment_service_id:
+          type: string
+          description: Service-specific identifier.
+        payment_provider:
+          type: string
+          description: The financial institution or processor.
+        payment_channel:
+          type: string
+          description: The specific payment mechanism (e.g., "credit_card", "qr_code").
+        pos_only:
+          type: boolean
+          description: Indicates if this method is restricted to physical point-of-sale use.
+
+    CheckoutResponse:
+      allOf:
+        - $ref: '#/components/schemas/GenericResponse'
+        - type: object
+          description: Response returned after a successful checkout operation.
+          properties:
+            results:
+              $ref: '#/components/schemas/Order'
+
+    Order:
+      type: object
+      description: Comprehensive record of a completed purchase.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the order record.
+        shop_id:
+          type: string
+          description: Identifier of the shop.
+        created_by:
+          type: string
+          description: Identifier of the session that created the order.
+        created_on:
+          type: integer
+          description: Unix timestamp when the order was placed.
+        edited_by:
+          type: string
+          description: Identifier of the last user to modify the order.
+        edited_on:
+          type: integer
+          description: Last modification timestamp.
+        request_ip:
+          type: string
+          description: IP address from which the order was placed.
+        request_country:
+          type: string
+          description: ISO country code of the order origin.
+        state:
+          type: string
+          description: The current status of the order.
+        customer_id:
+          type: string
+          description: Unique identifier for the guest customer.
+        customer_platform:
+          type: string
+          description: Platform used by the customer.
+        customer_type:
+          type: string
+          description: Type of customer account.
+        cart_id:
+          type: string
+          description: Identifier of the original shopping cart.
+        order_provider:
+          type: string
+          description: The system or service managing the order processing.
+        order_id:
+          type: string
+          description: External provider-specific order identifier.
+        order_number:
+          type: string
+          description: Human-readable reference number for the order.
+        payment_id:
+          type: string
+          description: Unique identifier for the payment transaction.
+        payment_service:
+          type: string
+          description: The payment service used.
+        payment_provider:
+          type: string
+          description: The payment processor name.
+        payment_channel:
+          type: string
+          description: The specific payment method used.
+        payment_authorize_url:
+          type: string
+          description: URL for the user to authorize or complete the payment.
+        payment_expire_on:
+          type: integer
+          description: Unix timestamp when the payment session expires.
+        shipping_id:
+          type: string
+          description: Unique identifier for the shipping record.
+        shipping_name:
+          type: string
+          description: Display name of the selected shipping service.
+        shipping_provider:
+          type: string
+          description: The logistics provider name.
+        shipping_provider_id:
+          type: string
+          description: Provider-specific identifier for the shipment.
+        billing_address:
+          $ref: '#/components/schemas/Address'
+        shipping_address:
+          $ref: '#/components/schemas/Address'
+        contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+          description: List of items purchased in the order.
+        currency:
+          type: string
+          description: Currency code for the order.
+        subtotal:
+          type: number
+          description: Order subtotal before discounts and fees.
+        discount:
+          type: number
+          description: Total discount applied.
+        nettotal:
+          type: number
+          description: Order total after discounts but before shipping and taxes.
+        vat:
+          type: number
+          description: Value Added Tax amount.
+        shipping:
+          type: number
+          description: Shipping fee charged.
+        shipping_discount:
+          type: number
+          description: Discount applied specifically to shipping.
+        total:
+          type: number
+          description: Final total amount paid for the order.
+
+    GetAddressesResponse:
+      allOf:
+        - $ref: '#/components/schemas/GenericResponse'
+        - type: object
+          description: Response containing a list of saved guest addresses.
+          properties:
+            results:
+              type: object
+              properties:
+                addresses:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/AddressBookEntry'
+                  description: List of entries in the guest's address book.
+                count:
+                  type: integer
+                  description: Total number of addresses returned.
+
+    AddressBookEntry:
+      type: object
+      description: A saved address record for a guest customer.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the address book entry.
+        created_by:
+          type: string
+          description: Identifier of the creator.
+        created_on:
+          type: integer
+          description: Creation timestamp.
+        edited_by:
+          type: string
+          description: Identifier of the last editor.
+        edited_on:
+          type: integer
+          description: Last modification timestamp.
+        shop_id:
+          type: string
+          description: Shop identifier.
+        customer_id:
+          type: string
+          description: Unique identifier for the guest customer.
+        name:
+          type: string
+          description: User-defined label for the address (e.g., "Default").
+        address:
+          $ref: '#/components/schemas/Address'
+        default:
+          type: boolean
+          description: Indicates if this is the preferred or default address.
+
+paths:
+  # --- SHOP & CONTENT ---
+  /shops/{shop_id}:
+    get:
+      tags:
+        - Shop Content
+      summary: Fetch shop configuration
+      description: >
+        Returns the complete public configuration for a specified shop, including branding, 
+        UI layout, currency, language, and storefront settings. This data defines the 
+        frontend rendering requirements and constraints for the shop.
+      operationId: getShopConfig
+      parameters:
+        - name: shop_id
+          in: path
+          required: true
+          description: Unique identifier of the shop.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully returned the shop configuration object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopConfigResponse'
+
+  /shops/{shop_id}/products:
+    get:
+      tags:
+        - Shop Content
+      summary: Fetch shop product list
+      description: >
+        Returns a paginated list of all products for the specified shop. Optional `lang` 
+        parameter filters product content by language code. Provides full product details 
+        including title, pricing, stock levels, and category.
+      operationId: listProducts
+      parameters:
+        - name: shop_id
+          in: path
+          required: true
+          description: Unique identifier of the shop.
+          schema:
+            type: string
+        - name: lang
+          in: query
+          required: false
+          description: ISO language code for localized product metadata.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully returned the list of available products.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductListResponse'
+
+  /shops/{shop_id}/products/{product_id}:
+    get:
+      tags:
+        - Shop Content
+      summary: Fetch product details
+      description: >
+        Retrieves comprehensive details for a specific product within a shop. 
+        Requires the `shop_id` and `product_id`. The optional `lang` query 
+        parameter provides localized content if available.
+      operationId: getProduct
+      parameters:
+        - name: shop_id
+          in: path
+          required: true
+          description: Unique identifier of the shop.
+          schema:
+            type: string
+        - name: product_id
+          in: path
+          required: true
+          description: Unique identifier of the product.
+          schema:
+            type: string
+        - name: lang
+          in: query
+          required: false
+          description: ISO language code for localized metadata (e.g., 'en-US').
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully returned the product details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProductResponse'
+
+  /shops/{shop_id}/shippings/configs:
+    get:
+      tags:
+        - Shop Content
+      summary: Fetch shipping configurations
+      description: >
+        Returns all shipping methods enabled for the shop, including service provider 
+        information, fee logic, delivery time estimates, and geographic zones.
+      operationId: listShippingConfigs
+      parameters:
+        - name: shop_id
+          in: path
+          required: true
+          description: Unique identifier of the shop.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully returned the list of available shipping configurations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingConfigListResponse'
+
+  /shops/{shop_id}/payments/configs:
+    get:
+      tags:
+        - Shop Content
+      summary: Fetch payment configurations
+      description: >
+        Returns all payment methods configured for the shop, including service providers, 
+        financial processors, payment channels, and service-specific identifiers.
+      operationId: listPaymentConfigs
+      parameters:
+        - name: shop_id
+          in: path
+          required: true
+          description: Unique identifier of the shop.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully returned the list of available payment configurations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentConfigListResponse'
+
+  /shops/{shop_id}/orders:
+    get:
+      tags:
+        - Shopping Cart
+      summary: Fetch order details
+      description: >
+        Retrieves a specific order record identified by order number and customer email. 
+        Requires valid bearer token authentication.
+      operationId: getOrder
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: shop_id
+          in: path
+          required: true
+          description: Unique identifier of the shop.
+          schema:
+            type: string
+        - name: e
+          in: query
+          required: true
+          description: Customer email address associated with the order.
+          schema:
+            type: string
+        - name: o
+          in: query
+          required: true
+          description: Unique human-readable order number.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully returned the order record.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOrderResponse'
+
+  # --- AUTHENTICATION ---
+  /shops/{shop_id}/guests:
+    post:
+      tags:
+        - Authentication
+      summary: Create guest session
+      description: >
+        Initializes a new temporary guest session for the specified shop. 
+        This is a mandatory step before performing any cart or checkout operations. 
+        The request requires a unique 'ref' string of exactly 16 characters. 
+        Upon success, the API returns a JWT in 'results.token' which must be 
+        used in the 'Authorization' header for all subsequent guest requests.
+      operationId: initializeGuest
+      parameters:
+        - name: shop_id
+          in: path
+          required: true
+          description: Unique identifier of the shop.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ref
+              properties:
+                ref:
+                  type: string
+                  minLength: 16
+                  maxLength: 16
+                  description: >
+                    A mandatory 16-character random string used for session 
+                    initialization and tracking. Must be exactly 16 characters long.
+      responses:
+        '200':
+          description: Successfully created a new guest session and returned the JWT.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokenResponse'
+
+  # --- SHOPPING CART ---
+  /shops/{shop_id}/carts/current:
+    get:
+      tags:
+        - Shopping Cart
+      summary: Fetch current cart
+      description: >
+        Returns the active shopping cart state for the authorized guest, including items, 
+        calculated totals, applied taxes, discounts, shipping fees, and payment status.
+      operationId: getGuestCart
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: shop_id
+          in: path
+          required: true
+          description: Unique identifier of the shop.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully returned the current guest cart details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+    put:
+      tags:
+        - Shopping Cart
+      summary: Update cart metadata
+      description: >
+        Updates the cart with customer contact, billing, and shipping details, along with 
+        the selected identifiers for shipping and payment configurations.
+      operationId: updateGuestCart
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: shop_id
+          in: path
+          required: true
+          description: Unique identifier of the shop.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCartRequest'
+      responses:
+        '200':
+          description: Successfully updated the cart configuration.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericResponse'
+
+  /shops/{shop_id}/carts/current/contents:
+    post:
+      tags:
+        - Shopping Cart
+      summary: Update cart items
+      description: >
+        Modifies the contents of the current cart. Adding or updating a product requires 
+        the `product_id` and the new `amount`. If the amount is set to 0, the product is removed.
+      operationId: updateCartContent
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: shop_id
+          in: path
+          required: true
+          description: Unique identifier of the shop.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCartContentRequest'
+      responses:
+        '200':
+          description: Successfully updated the cart content.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericResponse'
+
+  /shops/{shop_id}/carts/current/checkout:
+    post:
+      tags:
+        - Shopping Cart
+      summary: Finalize cart checkout
+      description: >
+        Processes the current shopping cart and converts it into a formal order. Returns 
+        the completed `Order` object, including payment authorization and shipping details.
+      operationId: checkoutGuestCart
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: shop_id
+          in: path
+          required: true
+          description: Unique identifier of the shop.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully converted the cart into an order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutResponse'

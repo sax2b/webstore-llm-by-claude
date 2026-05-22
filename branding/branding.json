@@ -1,0 +1,126 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "Noto Sans Thai Looped",
+      "role": "body"
+    }
+  ],
+  "colors": {
+    "primary": "#1E88E5",
+    "secondary": "#EF5350",
+    "accent": "#1E88E5",
+    "background": "#F5F5F5",
+    "textPrimary": "#2C2C2C",
+    "link": "#C69A5E"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "Noto Sans Thai Looped",
+      "heading": "Noto Sans Thai Looped"
+    },
+    "fontStacks": {
+      "heading": [
+        "noto-sans-thai-looped",
+        "sans-serif"
+      ],
+      "body": [
+        "noto-sans-thai-looped",
+        "sans-serif"
+      ],
+      "paragraph": [
+        "noto-sans-thai-looped",
+        "sans-serif"
+      ]
+    },
+    "fontSizes": {
+      "h1": "14px",
+      "h2": "14px",
+      "body": "18px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "borderRadius": "12px"
+  },
+  "components": {
+    "buttonPrimary": {
+      "background": "#1E88E5",
+      "textColor": "#FFFFFF",
+      "borderRadius": "12px",
+      "borderRadiusCorners": {
+        "topLeft": "12px",
+        "topRight": "12px",
+        "bottomRight": "12px",
+        "bottomLeft": "12px"
+      },
+      "shadow": "none"
+    },
+    "buttonSecondary": {
+      "background": "#C69A5E",
+      "textColor": "#050505",
+      "borderRadius": "4px",
+      "borderRadiusCorners": {
+        "topLeft": "4px",
+        "topRight": "4px",
+        "bottomRight": "4px",
+        "bottomLeft": "4px"
+      },
+      "shadow": "none"
+    }
+  },
+  "images": {
+    "favicon": null,
+    "ogImage": null
+  },
+  "__llm_logo_reasoning": {
+    "selectedIndex": -1,
+    "reasoning": "The candidate logo is tiny and likely a UI icon, not a main brand logo. No suitable brand logo was found in the header area.",
+    "confidence": 0.3,
+    "rejected": true,
+    "source": "llm"
+  },
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": 1,
+      "text": "Accept",
+      "reasoning": "Button #1 with text 'Accept' uses a vibrant blue color (#1E88E5), which is typically associated with primary actions. It also has a 'primary' class, indicating its importance."
+    },
+    "secondary": {
+      "index": 0,
+      "text": "Discover",
+      "reasoning": "Button #0 with text 'Discover' uses a distinct vibrant orange color (#C69A5E), making it suitable as a secondary action. It is from a different color group than the primary button."
+    },
+    "confidence": 0.95
+  },
+  "personality": {
+    "tone": "modern",
+    "energy": "medium",
+    "targetAudience": "business users and end consumers"
+  },
+  "designSystem": {
+    "framework": "custom",
+    "componentLibrary": ""
+  },
+  "confidence": {
+    "buttons": 0.95,
+    "colors": 0.9,
+    "overall": 0.925
+  },
+  "__llm_metadata": {
+    "logoSelection": {
+      "llmCalled": true,
+      "llmSucceeded": true,
+      "finalSource": "llm",
+      "rawLogoSelection": {
+        "selectedLogoIndex": -1,
+        "selectedLogoReasoning": "The candidate logo is tiny and likely a UI icon, not a main brand logo. No suitable brand logo was found in the header area.",
+        "confidence": 0.3
+      }
+    },
+    "buttonClassification": {
+      "llmCalled": true,
+      "llmSucceeded": true
+    }
+  }
+}

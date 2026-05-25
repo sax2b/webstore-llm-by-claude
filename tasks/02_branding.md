@@ -1,7 +1,9 @@
 # Task 02: JSON Design Ingestion
 
 ## 🎯 Objective
-Ingest active custom design system tokens from your workspace configuration tracking files, create/rewrite the global `BRANDING.md` specification dictionary, and inject the layout palette parameters straight into your primary layout engine stylesheets to standardize webstore theme configurations.
+
+Ingest design system tokens from your workspace configuration tracking files, create/rewrite the global `BRANDING.md` specification dictionary, and inject the layout palette parameters straight into your primary layout engine stylesheets to standardize webstore theme configurations.
+
 ---
 
 ## 🧱 Implementation Requirements & Steps

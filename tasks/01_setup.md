@@ -1,6 +1,7 @@
 # Task 01: Scaffolding Vite React+TypeScript Application with TailwindCSS
 
 ## 🎯 Objective
+
 Initialize a new Vite application using React and TypeScript from an absolute blank directory, install Tailwind CSS dependencies, and verify the local development pipeline functions.
 
 ## 📁 Connected References
@@ -11,8 +12,7 @@ Initialize a new Vite application using React and TypeScript from an absolute bl
 ## 🧱 Implementation Requirements & Steps
 
 ### 1. Scaffold the Core Application Frame
-- Open the terminal interface in your completely empty project root folder.
-- Execute the native Vite creation command to scaffold a fresh React + TypeScript application right in the current directory (`.`):
+- Execute the native Vite creation command to scaffold a fresh React + TypeScript application in the current directory (`.`):
   
 ```bash
   npm create vite@latest . -- --template react-ts
@@ -29,7 +29,7 @@ Initialize a new Vite application using React and TypeScript from an absolute bl
 ```bash
   npm install -D tailwindcss postcss autoprefixer
 ```
-- Generate the system structural configuration configuration scripts:
+- Generate the system structural configuration scripts:
 ```bash
   npx tailwindcss init -p
 ```

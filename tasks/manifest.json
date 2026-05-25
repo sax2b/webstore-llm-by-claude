@@ -3,6 +3,7 @@
   "task_directory": "tasks/",
   "execution_sequence": [
     { "id": "01_setup", "file": "01_setup.md", "status": "pending", "depends_on": [] },
-    { "id": "02_branding", "file": "02_branding.md", "status": "pending", "depends_on": ["01_setup"] }
+    { "id": "02_branding", "file": "02_branding.md", "status": "pending", "depends_on": ["01_setup"] },
+    { "id": "03_landingpage", "file": "03_landingpage.md", "status": "pending", "depends_on": ["02_branding"] }
   ]
 }

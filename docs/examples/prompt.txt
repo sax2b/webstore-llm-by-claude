@@ -1,11 +1,7 @@
-System execution block initiated. 
+System execution block initiated.
 
-1. Read `AGENTS.md` and `SYSTEM.md` to load your execution blueprint, architecture rules, and styling constraints.
-2. Follow the "Workflow" section in `AGENTS.md` exactly:
-   - Scan `tasks/manifest.json` to find the first task marked as "pending".
-   - Explicitly print a terminal message stating: "🎯 [TARGET FOCUS] Now executing Task [ID]: [Task Name]".
-   - Open that task's markdown file and implement the requested files in FULL with absolute zero truncation (`...`).
-3. Run the "Compilation Check" and "Runtime Verification" commands precisely as documented.
-4. Upon a successful build with zero errors, perform the "Manifest Handshake" by updating the task's status to "completed" in `tasks/manifest.json` and halt.
+1. Read `SYSTEM.md` and `AGENTS.md` to load your core engineering laws, style rules, and workflow protocols.
+2. Follow the exact step-by-step `Workflow` detailed inside `AGENTS.md` to locate the active pending task, execute it, and perform the verification build.
 
-Begin execution now. State your target focus clearly before writing code.
+Begin execution now. State your target focus clearly before writing code by printing:
+"🎯 [TARGET FOCUS] Now executing Task [ID]: [Task Name]"

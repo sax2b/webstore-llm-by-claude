@@ -5,7 +5,8 @@
 Generate the layout for the e-commerce landing page and components using React, TypeScript, and standard TailwindCSS.
 
 ## 📁 Connected References
-- **Automation Guides**: `AGENTS.md`
+- **System Rules**: `SYSTEM.MD` (Strict adherence to global engineering, syntax, and engine protocols is mandatory).
+- **Automation Guides**: `AGENTS.md` (Adhere strictly to Global Negative Constraints).
 - **Brand Guidelines**: `/branding/BRANDING.MD` (If it does not exist, cancel this task immediately).
 
 > ⚠️ **CRITICAL BRANDING GUARDRAIL**: Every component implemented in this task must strictly adhere to the layout rules, typography tokens, spacing baselines, font families, tracking, and palette variables defined in `/branding/BRANDING.MD`. 
@@ -17,7 +18,7 @@ Generate the layout for the e-commerce landing page and components using React, 
 ## 🧱 Implementation Requirements & Steps
 
 ### 1. BCP-47 Normalized Directory Mapping (`public/locales/`)
-- Create the following folders and translation JSON files:
+- Create the following folders and example translation JSON files:
   - `public/locales/en-US/translation.json`:
   ```json
   {
@@ -74,51 +75,58 @@ Generate the layout for the e-commerce landing page and components using React, 
   };
   ```
 
-### 4. Loading Indicator Component (`src/components/LoadingIndicator.tsx`)
+### 4. Shop Context (src/context/ShopContext.tsx)
+- Import the Shop interface from `src/types/shop.ts`.
+- Create a global React Context (`ShopContext`) and a custom hook helper (`useShop()`) to store, manage, and export the loaded runtime `shopData` state configuration object down the component tree via a structural `<ShopProvider>`.
+
+### 5. Loading Indicator Component (`src/components/LoadingIndicator.tsx`)
 - Create a standalone component file for the loading state screen.
 - **Dependencies**: Import the `Loader2` icon component from the `lucide-react` library.
-- **Layout Styling**: Render a full-viewport, centered flexbox using Tailwind utility classes: `fixed inset-0 flex items-center justify-center bg-white z-50`.
-- **Spinner Styling**: Render the <Loader2 /> component inside the flexbox. Apply the native Tailwind utility classes: `animate-spin h-10 w-10 text-blue-500`.
+- **Layout Styling**: Render a full-viewport, centered flexbox using Tailwind utility classes:
+  - Example structural layout: `fixed inset-0 flex items-center justify-center bg-white z-50`.
+  - Example spinner layout: `<Loader2 className="animate-spin h-10 w-10 text-blue-500" />`.
 
-### 5. Application Initialization Engine (src/App.tsx)
+### 6. Application Initialization Engine (src/App.tsx)
 - Maintain two React states:
   - `currentLocale` (string, loaded from localStorage.lang or defaulting to "en-US")
   - `translations` (the active translation object).
   - `shopConfig` (`Shop` object or null)
-- Use a `useEffect` hooked to `currentLocale` to trigger `fetchTranslations`.
+- Use a `useEffect` hooked to currentLocale, trigger `fetchTranslations`. Simultaneously simulate an API backend payload fetch by writing `MOCK_SHOP` from `src/types/shop.ts` into the `shopConfig` state.
 - **Loading Rule:** If `translations` is null, stop and return `<LoadingIndicator />`. Do not render the main page layout until translations are fully loaded.
 
-### 6. Header/Navigation Bar (`src/components/Header.tsx`)
-- Create the top-level navigation row as a standalone component, configuring configuring it as a sticky element (`sticky top-0 z-50 bg-white border-b border-gray-200 w-full px-4 py-3 flex justify-between items-center`).
+### 7. Header/Navigation Bar (`src/components/Header.tsx`)
+- Create the top-level navigation row as a standalone component, configuring configuring it as a sticky element:
+  - Example Layout Structure: `sticky top-0 z-50 bg-white border-b border-gray-200 w-full px-4 py-3 flex justify-between items-center`.
 - Do not mount this globally in `src/App.tsx`. Import and place `<Header />` explicitly at the top of specific page components.
 - **UI Layout**
   - **Left Side**:
-    - Render shop name with prominent scaling. On user click interaction, redirect the user router to `/`.
-  - **Right Side**:
+    - Consume the global `useShop()` context. Render `shopConfig.name` with prominent scaling. On click, redirect the user to `/`.
+  - **Right Side**: Group the language select and the shopping cart button together (Example Layout Structure: `flex items-center space-x-4`).
     - **Language Selector**:
-      - Loop through `SUPPORTED_LOCALES`. Use `localeDisplayMap[locale]` to render "EN" or "TH" in the UI.
+      - Render as an extensible dropdown selector with the active languague
+      - Loop through `shopConfig.supported_languages`. Use `localeDisplayMap[locale]` to render "EN" or "TH" in the UI.
       - On user click interaction, update `localStorage` under the `lang` key, `currentState` state, and the appllication instantly.
     - **Cart Button**:
       - Create a cart button and notification badge showing the count amount of items.
 
-### 7. Product Types & Static Mock Data (src/types/product.ts)
+### 8. Product Types & Static Mock Data (src/types/product.ts)
 - Create a single file to handle both interface shapes and initial mock arrays.
 - **TypeScript Interface**: Define a strict Product type containing:
-  - id (string)
-  - title (optional string)
-  - name (string)
-  - price (number in cents)
-  - currency (string. 'thb', 'usd')
-  - description (string)
-  - image (string)
-  - available (number, e.g. 0 or 1)
-  - state (optional string. 'active' or 'inactive')
+  - `id` (string)
+  - `title` (optional string)
+  - `name` (string)
+  - `price` (number in cents)
+  - `currency` (string, e.g., 'thb', 'usd')
+  - `description` (string)
+  - `image` (string)
+  - `available` (number, e.g., 0 or 1)
+  - `state` (optional string, e.g., 'active' or 'inactive')
 - **Static Export Array**: Export a `MOCK_PRODUCTS` array containing at least 4 items to fully test grid layouts and fallback features:
   - Item 1: Standard product (has a title, state: 'active', and available: 5).- Item 2: Dynamic title fallback tester (has NO title, only name, state: 'active', and available: 2).
   - Item 3: Out of stock tester (has title, state: 'active', and available: 0).
   - Item 4: Coming soon tester (has title, state: 'inactive', and available: 3).
 
-### 8. Product Listing Grid (`src/components/ProductGrid.tsx`)
+### 9. Product Listing Grid (`src/components/ProductGrid.tsx`)
 - Create a standalone component to render the responsive product array layout grid.
 - **Empty State Rule**: If the product array is empty or length is 0, render a centered placeholder layout message container using the translation state mapping key: `translations['grid.empty']`. Do not render the layout grid frame if empty.
 - **Grid Layout Wrapper**: If items exist, render a mobile-first responsive Tailwind grid layout.
@@ -134,11 +142,16 @@ Generate the layout for the e-commerce landing page and components using React, 
   - **Image Footer Banner**:
     If `product.available === 0`, render a banner layout spanning accross the bottom baseline boundary of the image containing `translations['status.unavailable']` backed by a distinct background overlay color.
 
-### 8. Core Landing Page Layout Assembly (src/pages/Landing.tsx)
+### 10. Core Landing Page Layout Assembly (src/pages/Landing.tsx)
 - Create the primary landing page view tree using the components built in the previous steps
 - **Header Placement**: Import and mount the <Header /> right at the top of the viewport layout.
 - **Hero Banner Area**: Below the navbar, build a full-width banner block. Brand Rule Apply: Background fills, padding blocks, and text alignment rules must match the global page header template styles from the guide.
-  - Example Layout structure: `w-full bg-gray-50 py-12 px-6 mb-6 text-center`
+  - Example Layout Structure: `w-full bg-gray-50 py-12 px-6 mb-6 text-center`
   - Render the localized title using: `translations['hero.title']`.
   - Render the localized slogan string using: `translations['hero.slogan']`.
+  - If `shopConfig.storefront_background_image_url` is present, render it dynamically as the background layer behind the hero banner block wrapper.
 - **Grid Placement**: Pass `MOCK_PRODUCTS` into the <ProductGrid /> component beneath the hero area.
+
+## 🏁 Task Verification Requirements
+- Run local compilation verification scripts via `npm run build` to guarantee zero TypeScript or build errors exist.
+- Edit `tasks/manifest.json`, switch the status value for Task 03 from "pending" to "completed", and stop.

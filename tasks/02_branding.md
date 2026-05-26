@@ -4,6 +4,10 @@
 
 Ingest design system tokens from your workspace configuration tracking files, create/rewrite the global `BRANDING.md` specification dictionary, and inject the layout palette parameters straight into your primary layout engine stylesheets to standardize webstore theme configurations.
 
+## 📁 Connected References
+- **System Rules**: `SYSTEM.MD` (Strict adherence to global engineering, syntax, and engine protocols is mandatory).
+- **Automation Guides**: `AGENTS.md` (Adhere strictly to Global Negative Constraints and Scope Containment Rules).
+
 ---
 
 ## 🧱 Implementation Requirements & Steps
@@ -16,7 +20,7 @@ Ingest design system tokens from your workspace configuration tracking files, cr
 
 ### 2. Generate BRANDING.md (Strict Formatting Guide)
 - Read the active parameters from your target JSON layout configurations.
-- Create or completely overwrite **`BRANDING.md`** in your project root. The agent must format the markdown output to match this exact template layout structural format:
+- Create or completely overwrite **`branding/BRANDING.MD`** (Ensure it is nested inside the `branding/` directory in uppercase to comply with downstream task dependencies). The agent must format the markdown output to match this exact template layout structural format:
 
 ```markdown
 # BRANDING.md
@@ -107,3 +111,8 @@ ASSETS:
   }
 }
 ```
+
+## 🏁 Task Verification Requirements
+- Verify that `branding/BRANDING.MD` exists precisely at that path and matches the token mapping structure completely.
+- Ensure `src/index.css` successfully compiles without unexpected Tailwind syntax parser anomalies.
+- Edit `tasks/manifest.json`, switch the status value for Task 02 from "pending" to "completed", and stop.

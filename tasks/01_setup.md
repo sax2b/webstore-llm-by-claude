@@ -53,3 +53,7 @@ export default function App() {
     );
   }
 ```
+
+## 🏁 Task Verification Requirements
+- Run local compilation verification scripts via `npm run build` to guarantee zero TypeScript or build errors exist.
+- Edit `tasks/manifest.json`, switch the status value for Task 01 from "pending" to "completed", and stop.

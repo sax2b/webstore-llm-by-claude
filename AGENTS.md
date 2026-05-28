@@ -4,21 +4,31 @@
 This repository functions as an **AI-ready template** designed to systematically construct fully operational webstores. It provides automated workflows, pre-mapped design systems, and explicit API layers so an AI agent can ingest user prompts and compile a customized web store with zero human friction.
 
 ## 📁 Workspace Context Hierarchy
-1. `SYSTEM.md` (Absolute core behavioral constraints, engine parameters, and coding laws)
-2. `tasks/` (Isolated step-by-step implementation files)
+| Context File | Description |
+| :--- | :--- |
+| **1. `CODING_STANDARD.md`** | Code completeness rules, syntax guardrails, and forbidden formats. |
+| **2. `INCREMENTAL_CHANGES.md`** | Maximum file change limits, file preservation, and scope boundaries. |
+| **3. `STYLING_UI.md`** | Tailwind utility constraints, layout fluidity, and responsive rules. |
+| **4. `tasks/`** | Isolated step-by-step implementation tasks. |
 
 ## Workflow
-- Read `SYSTEM.md` for core architecture and UI constraints.
-- **Locate Pending Task**: Open `tasks/manifest.json`. Scan the execution sequence to find the first task where the status parameter is currently set to "pending".
-- **Analyze Requirements**: Open the corresponding task Markdown file inside the `tasks/` directory and implement all files fully with absolute zero truncation.
-- **Compilation Check**: Run a full production build script check after any file modification to guarantee code and style injections compile flawlessly with no errors:
+- **1. Locate Pending Task**: Open `tasks/manifest.json`. Scan the execution sequence to find the first task where the status parameter is currently set to "pending".
+- **2. Pre-Flight Context Initialization**: Scan that task file for a `Connected References` section:
+  * **IF Connected References EXIST:** You must halt linear execution immediately. Open and read **ONLY** the specific files explicitly listed as literal strings under that exact heading. You are strictly forbidden from reading, scanning, or parsing any other unlisted architectural files in the workspace at this stage. Before generating code, print a short list of these loaded files to prove compliance.
+  * **IF Connected References DO NOT EXIST:** Proceed directly to Step 3.
+- **3. Analyze & Implement**: Process the step-by-step implementation requirements inside the task file. Modify and write all files fully from top to bottom with absolute zero truncation or placeholder shortcuts.
+- **4. Linting Verification**: Run the project's static analysis tool to ensure the written code strictly adheres to style and quality rules without warning or error:
+  ```bash
+  npm run lint
+  ```
+- **5. Compilation Check**: Run a full production build script check after any file modification to guarantee code and style injections compile flawlessly with no errors:
   ```bash
   npm run build
   ```
-- **Runtime Verification:** Spin up the local development engine to verify that the application servers successfully without client-side exceptions:
+- **6. Runtime Verification:** Spin up the local development engine to verify that the application servers successfully without client-side exceptions:
   ```bash
   npm run dev
   ```
-- **Manifest Handshake**:
-  - Once the application passes both validation checks, update tasks/manifest.json by changing the completed task's status parameter cleanly to "completed".
-  - `IF` the build fails: Fix the errors right away, then back to `Compilation Check` step again.
+- **7. Manifest Handshake & Loop**:
+  - **SUCCESS**: If the application passes both the build and runtime verification checks, update `tasks/manifest.json` by changing that task's status parameter cleanly to "completed".
+  - **FAILURE**: If either check fails, immediately fix the errors, preserve existing codebase integrity, and return directly to the **Linting Verification** step. Do not modify the manifest status until all errors are resolved.

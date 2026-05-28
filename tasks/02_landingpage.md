@@ -1,13 +1,16 @@
-# Task 03: E-Commerce Storefront Core Generation
+# Task 02: E-Commerce Storefront Core Generation
 
 ## 🎯 Objective
 
 Generate the layout for the e-commerce landing page and components using React, TypeScript, and standard TailwindCSS.
 
 ## 📁 Connected References
-- **System Rules**: `SYSTEM.MD` (Strict adherence to global engineering, syntax, and engine protocols is mandatory).
-- **Automation Guides**: `AGENTS.md` (Adhere strictly to Global Negative Constraints).
-- **Brand Guidelines**: `/branding/BRANDING.MD` (If it does not exist, cancel this task immediately).
+
+- `AGENTS.md`
+- `CODING_STANDARD.md`
+- `INCREMENTAL_CHANGES.md`
+- `/branding/BRANDING.md`
+- `STYLING_UI.md`
 
 > ⚠️ **CRITICAL BRANDING GUARDRAIL**: Every component implemented in this task must strictly adhere to the layout rules, typography tokens, spacing baselines, font families, tracking, and palette variables defined in `/branding/BRANDING.MD`. 
 > 
@@ -154,4 +157,4 @@ Generate the layout for the e-commerce landing page and components using React, 
 
 ## 🏁 Task Verification Requirements
 - Run local compilation verification scripts via `npm run build` to guarantee zero TypeScript or build errors exist.
-- Edit `tasks/manifest.json`, switch the status value for Task 03 from "pending" to "completed", and stop.
+- Edit `tasks/manifest.json`, switch the status value for Task 02 from "pending" to "completed", and stop.

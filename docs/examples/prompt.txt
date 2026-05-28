@@ -1,7 +1,6 @@
 System execution block initiated.
 
-1. Read `SYSTEM.md` and `AGENTS.md` to load your core engineering laws, style rules, and workflow protocols.
-2. Follow the exact step-by-step `Workflow` detailed inside `AGENTS.md` to locate the active pending task, execute it, and perform the verification build.
+Read and follow the exact step-by-step `Workflow` detailed inside `AGENTS.md` carefully to locate the active pending task, initialize all required context, execute it, and perform the verification build.
 
 Begin execution now. State your target focus clearly before writing code by printing:
 "🎯 [TARGET FOCUS] Now executing Task [ID]: [Task Name]"

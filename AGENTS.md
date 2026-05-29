@@ -9,7 +9,8 @@ This repository functions as an **AI-ready template** designed to systematically
 | **1. `CODING_STANDARD.md`** | Code completeness rules, syntax guardrails, and forbidden formats. |
 | **2. `INCREMENTAL_CHANGES.md`** | Maximum file change limits, file preservation, and scope boundaries. |
 | **3. `STYLING_UI.md`** | Tailwind utility constraints, layout fluidity, and responsive rules. |
-| **4. `tasks/`** | Isolated step-by-step implementation tasks. |
+| **4. `PROGRESS.md`** | The Agent Action Log. Read this to understand all historical changes made to the project. |
+| **5. `tasks/`** | Isolated step-by-step implementation tasks. |
 
 ## Workflow
 - **1. Locate Pending Task**: Open `tasks/manifest.json`. Scan the execution sequence to find the first task where the status parameter is currently set to "pending".
@@ -30,5 +31,21 @@ This repository functions as an **AI-ready template** designed to systematically
   npm run dev
   ```
 - **7. Manifest Handshake & Loop**:
-  - **SUCCESS**: If the application passes both the build and runtime verification checks, update `tasks/manifest.json` by changing that task's status parameter cleanly to "completed".
   - **FAILURE**: If either check fails, immediately fix the errors, preserve existing codebase integrity, and return directly to the **Linting Verification** step. Do not modify the manifest status until all errors are resolved.
+  - **SUCCESS**: If the application passes both the build and runtime verification checks, perform the actions below:
+  * Update `tasks/manifest.json` by changing that task's status parameter cleanly to "completed".
+  * Append a new, concise record of your work to the top of PROGRESS.md using the exact markdown format below. This file serves as your primary external memory bank; when context is clear or reset, you will rely entirely on reading this single file to understand everything that has been done across the whole project. Do not include future plans or notes; record only what was successfully compiled.
+
+## Expected `PROGRESS.md` Entry Format
+
+```markdown
+### ✅ [2026-05-29 18:55] - Implemented Stripe Checkout Pipeline
+* **Task File:** `tasks/04-stripe-integration.md`
+* **Files Modified:** 
+  * `src/api/checkout.js`
+  * `src/components/Cart.jsx`
+* **Changes Delivered:**
+  * Created secure serverless function to generate Stripe checkout sessions.
+  * Embedded redirect trigger on the client-side cart checkout component.
+  * Integrated webhooks to handle successful payment events securely.
+```

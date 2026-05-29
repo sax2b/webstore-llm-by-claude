@@ -1,0 +1,1 @@
+Read `PROGRESS.md` from top to bottom to initialize your project context and understand everything that has been done across the workspace. Do not execute anything.

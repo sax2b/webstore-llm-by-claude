@@ -11,17 +11,21 @@ export async function fetchTranslations(requestedLocale: string, supportedLocale
   let locale = requestedLocale;
   if (!supportedLocales.includes(locale)) {
     locale = DEFAULT_LOCALE;
-    localStorage.lang = DEFAULT_LOCALE;
+    localStorage.setItem('lang', DEFAULT_LOCALE);
   }
 
   try {
     const response = await fetch(`/locales/${locale}/translation.json`);
-    if (!response.ok) throw new Error('Failed to fetch translations');
+    if (!response.ok) {
+      throw new Error(`Failed to fetch translations for ${locale}`);
+    }
     return await response.json();
   } catch (error) {
-    console.error('Error fetching translations:', error);
-    // Fallback to English if fetch fails
-    const fallbackResponse = await fetch(`/locales/${DEFAULT_LOCALE}/translation.json`);
-    return await fallbackResponse.json();
+    console.error('Translation fetch error:', error);
+    // Fallback to default locale if requested fails
+    if (locale !== DEFAULT_LOCALE) {
+      return fetchTranslations(DEFAULT_LOCALE, supportedLocales);
+    }
+    return {};
   }
 }

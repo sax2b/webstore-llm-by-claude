@@ -1,1 +1,13 @@
-Read `PROGRESS.md` from top to bottom to initialize your project context and understand everything that has been done across the workspace. Do not execute anything.
+# READ-ONLY CONTEXT INITIALIZATION
+
+## OBJECTIVE
+Read `PROGRESS.md` from top to bottom to ingest project context. HALT after reading.
+
+## CRITICAL CONSTRAINTS
+* **DO NOT** execute tasks, write code, or modify files.
+* **DO NOT** plan next steps or create to-do lists.
+* **READ ONLY.** No actions or tool usage permitted.
+
+## REQUIRED OUTPUT FORMAT
+[2-3 sentence high-level summary of the file content]
+"Context initialized. Standing by for instructions."

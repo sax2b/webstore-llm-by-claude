@@ -1,0 +1,30 @@
+# BUG FIX
+
+## OBJECTIVE
+1. Read the specified target files to gain exact context.
+2. [Insert a core task here]
+
+## TARGET FILES TO READ FIRST
+* `INCREMENTAL_CHANGES.md`
+* `STYLING_UI.md`
+* `CODING_STANDARD.md`
+
+## WORKFLOW
+1. **Context Phase:** Read the target files listed above from top to bottom. Do not write code yet.
+2. **Execution Phase:** Apply minimal changes to fulfill the core task based on the read context.
+3. **Validation Phase:** Run the verification build or test command.
+
+## REQUIRED LOGGING PROTOCOL
+You must print the exact matching log line **before** taking any action or using any tool:
+* `🎯 [TARGET FOCUS] Initializing with target files...`
+* `🔍 [READING] Ingesting [File Path]...`
+* `🛠️ [EXECUTING] Applying changes to [File Path]...`
+* `⚡ [VERIFYING] Running verification via [Command]...`
+* `✅ [SUCCESS] Task completed and verified.`
+
+## CONSTRAINTS
+* The `🎯 [TARGET FOCUS]` line **must** be the absolute first text you output. No intro text.
+* **MUST** read all files listed under "TARGET FILES" before printing any `🛠️ [EXECUTING]` lines.
+* Never use a tool, read a file, or write code without logging it first.
+
+Begin context phase now.

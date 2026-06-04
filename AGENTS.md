@@ -35,7 +35,8 @@ This repository functions as an **AI-ready template** designed to systematically
   - **SUCCESS**: If the application passes both the build and runtime verification checks, perform the actions below:
   * Update `tasks/manifest.json` by changing that task's status parameter cleanly to "completed".
   * Append a new, concise record of your work to the top of PROGRESS.md using the exact markdown format below. This file serves as your primary external memory bank; when context is clear or reset, you will rely entirely on reading this single file to understand everything that has been done across the whole project. Do not include future plans or notes; record only what was successfully compiled.
-
+  * If no focused task file, add N/A in `Task File` topic
+  
 ## Expected `PROGRESS.md` Entry Format
 
 ```markdown

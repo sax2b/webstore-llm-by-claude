@@ -8,6 +8,7 @@
     - ” and “ → "
     - Any other Unicode quotes → straight quotes
 *   **DO** escape apostrophes safely (`'don\'t'`) or use double quotes (`"don't"`).
+*   **DO** use modern TypeScript arrow functions (`=>`) exclusively.
 
 ## DON'Ts
 *   **DON'T** use emojis in any code, text, console logs, or UI elements.

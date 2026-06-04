@@ -1,6 +1,20 @@
-System execution block initiated.
+# TASK EXECUTION
 
-Read and follow the exact step-by-step `Workflow` detailed inside `AGENTS.md` carefully to locate the active pending task, initialize all required context, execute it, and perform the verification build.
+## WORKFLOW
+1. Follow `AGENTS.md` to find the active task.
+2. Initialize context, execute the task, and run the verification build.
 
-Begin execution now. State your target focus clearly before writing code by printing:
-"🎯 [TARGET FOCUS] Now executing Task [ID]: [Task Name]"
+## REQUIRED LOGGING PROTOCOL
+You must print the exact matching log line **before** taking any action or using any tool:
+
+* **Start:** `🎯 [TARGET FOCUS] Now executing Task [ID]: [Task Name]`
+* **Read:** `🔍 [READING] [File Path]`
+* **Write:** `🛠️ [EXECUTING] [File Path]`
+* **Build:** `⚡ [VERIFYING] [Command]`
+* **Done:** `✅ [SUCCESS] Task [ID] complete.`
+
+## CONSTRAINTS
+* The `🎯 [TARGET FOCUS]` line **must** be the absolute first text you output. No intro text.
+* Never use a tool or read/write a file without logging it first.
+
+Begin execution now.

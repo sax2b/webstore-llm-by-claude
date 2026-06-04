@@ -12,9 +12,9 @@ Generate the layout for the e-commerce landing page and components using React, 
 - `/branding/BRANDING.md`
 - `STYLING_UI.md`
 
-> ⚠️ **CRITICAL BRANDING GUARDRAIL**: Every component implemented in this task must strictly adhere to the layout rules, typography tokens, spacing baselines, font families, tracking, and palette variables defined in `/branding/BRANDING.MD`. 
+> ⚠️ **CRITICAL BRANDING GUARDRAIL**: Every component implemented in this task must strictly adhere to the layout rules, typography tokens, spacing baselines, font families, tracking, and palette variables defined in `/branding/BRANDING.md`. 
 > 
-> All code snippets and class names provided in the steps below are **structural architectural examples only**. The agent must adapt all Tailwind utility classes (including but not limited to colors, padding, margins, borders, rounding, and sizing) to match the explicit rules of the Brand Guidelines file. If `/branding/BRANDING.MD` is missing, halt execution and fail immediately.
+> All code snippets and class names provided in the steps below are **structural architectural examples only**. The agent must adapt all Tailwind utility classes (including but not limited to colors, padding, margins, borders, rounding, and sizing) to match the explicit rules of the Brand Guidelines file. If `/branding/BRANDING.md` is missing, halt execution and fail immediately.
 
 ---
 
@@ -82,14 +82,7 @@ Generate the layout for the e-commerce landing page and components using React, 
 - Import the Shop interface from `src/types/shop.ts`.
 - Create a global React Context (`ShopContext`) and a custom hook helper (`useShop()`) to store, manage, and export the loaded runtime `shopData` state configuration object down the component tree via a structural `<ShopProvider>`.
 
-### 5. Loading Indicator Component (`src/components/LoadingIndicator.tsx`)
-- Create a standalone component file for the loading state screen.
-- **Dependencies**: Import the `Loader2` icon component from the `lucide-react` library.
-- **Layout Styling**: Render a full-viewport, centered flexbox using Tailwind utility classes:
-  - Example structural layout: `fixed inset-0 flex items-center justify-center bg-white z-50`.
-  - Example spinner layout: `<Loader2 className="animate-spin h-10 w-10 text-blue-500" />`.
-
-### 6. Application Initialization Engine (src/App.tsx)
+### 5. Application Initialization Engine (src/App.tsx)
 - Maintain two React states:
   - `currentLocale` (string, loaded from localStorage.lang or defaulting to "en-US")
   - `translations` (the active translation object).
@@ -97,7 +90,7 @@ Generate the layout for the e-commerce landing page and components using React, 
 - Use a `useEffect` hooked to currentLocale, trigger `fetchTranslations`. Simultaneously simulate an API backend payload fetch by writing `MOCK_SHOP` from `src/types/shop.ts` into the `shopConfig` state.
 - **Loading Rule:** If `translations` is null, stop and return `<LoadingIndicator />`. Do not render the main page layout until translations are fully loaded.
 
-### 7. Header/Navigation Bar (`src/components/Header.tsx`)
+### 6. Header/Navigation Bar (`src/components/Header.tsx`)
 - Create the top-level navigation row as a standalone component, configuring configuring it as a sticky element:
   - Example Layout Structure: `sticky top-0 z-50 bg-white border-b border-gray-200 w-full px-4 py-3 flex justify-between items-center`.
 - Do not mount this globally in `src/App.tsx`. Import and place `<Header />` explicitly at the top of specific page components.
@@ -112,7 +105,7 @@ Generate the layout for the e-commerce landing page and components using React, 
     - **Cart Button**:
       - Create a cart button and notification badge showing the count amount of items.
 
-### 8. Product Types & Static Mock Data (src/types/product.ts)
+### 7. Product Types & Static Mock Data (src/types/product.ts)
 - Create a single file to handle both interface shapes and initial mock arrays.
 - **TypeScript Interface**: Define a strict Product type containing:
   - `id` (string)
@@ -129,7 +122,7 @@ Generate the layout for the e-commerce landing page and components using React, 
   - Item 3: Out of stock tester (has title, state: 'active', and available: 0).
   - Item 4: Coming soon tester (has title, state: 'inactive', and available: 3).
 
-### 9. Product Listing Grid (`src/components/ProductGrid.tsx`)
+### 8. Product Listing Grid (`src/components/ProductGrid.tsx`)
 - Create a standalone component to render the responsive product array layout grid.
 - **Empty State Rule**: If the product array is empty or length is 0, render a centered placeholder layout message container using the translation state mapping key: `translations['grid.empty']`. Do not render the layout grid frame if empty.
 - **Grid Layout Wrapper**: If items exist, render a mobile-first responsive Tailwind grid layout.
@@ -145,7 +138,7 @@ Generate the layout for the e-commerce landing page and components using React, 
   - **Image Footer Banner**:
     If `product.available === 0`, render a banner layout spanning accross the bottom baseline boundary of the image containing `translations['status.unavailable']` backed by a distinct background overlay color.
 
-### 10. Core Landing Page Layout Assembly (src/pages/Landing.tsx)
+### 9. Core Landing Page Layout Assembly (src/pages/Landing.tsx)
 - Create the primary landing page view tree using the components built in the previous steps
 - **Header Placement**: Import and mount the <Header /> right at the top of the viewport layout.
 - **Hero Banner Area**: Below the navbar, build a full-width banner block. Brand Rule Apply: Background fills, padding blocks, and text alignment rules must match the global page header template styles from the guide.

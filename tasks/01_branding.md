@@ -114,6 +114,11 @@ ASSETS:
 ```
 
 ## 🏁 Task Verification Requirements
-- Verify that `branding/BRANDING.md` exists precisely at that path and matches the token mapping structure completely.
-- Ensure `src/index.css` successfully compiles without unexpected Tailwind syntax parser anomalies.
-- Edit `tasks/manifest.json`, switch the status value for Task 02 from "pending" to "completed", and stop.
+You are strictly required to execute the following verification steps and terminal operations sequentially from top to bottom before closing this task:
+* **Verify Branding**: Check that `/branding/BRANDING.md` exists exactly at that path and matches the token mapping completely.
+* **Verify Tailwind**: Ensure `src/index.css` successfully compiles without any unexpected syntax parser errors.
+* **Run Linting**: Execute `npm run lint` in your terminal and fix any style errors immediately.
+* **Run Build**: Execute `npm run build` in your terminal to ensure the codebase compiles with zero errors.
+* **Error Loop**: If linting or build fails, fix the code and repeat the tests. Do not mark the task complete if a check fails.
+* **Manifest Handshake**: Once all tests pass, open `tasks/manifest.json` and change this task's status from "pending" to "completed".
+* **Log Progress**: Append a brief summary of your changes to the top of `PROGRESS.md` using the format in `AGENTS.md`, then stop.

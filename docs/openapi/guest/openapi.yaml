@@ -284,6 +284,9 @@ components:
         payment_authorize_url:
           type: string
           description: URL to redirect the guest for payment authorization.
+        payment_url:
+          type: string
+          description: URL to redirect payment page.
         payment_expire_on:
           type: integer
           description: Unix timestamp when the current payment session expires.

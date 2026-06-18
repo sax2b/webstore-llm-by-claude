@@ -100,7 +100,7 @@ Generate the layout for the e-commerce landing page and components using React, 
   - **Right Side**: Group the language select and the shopping cart button together (Example Layout Structure: `flex items-center space-x-4`).
     - **Language Selector**:
       - Render as an extensible dropdown selector with the active languague
-      - Loop through `shopConfig.supported_languages`. Use `localeDisplayMap[locale]` to render "EN" or "TH" in the UI.
+      - Loop through `shopConfig.supported_languages`. Use `localeDisplayMap[locale]` to render "EN" or "TH" in the UI. DON'T add any language from `shopConfig.supported_languages` that does not exist in `localDisplayMap`. 
       - On user click interaction, update `localStorage` under the `lang` key, `currentState` state, and the appllication instantly.
     - **Cart Button**:
       - Create a cart button and notification badge showing the count amount of items.
@@ -131,12 +131,28 @@ Generate the layout for the e-commerce landing page and components using React, 
   - The entire surface area of the card container wrapper must be interactive and clickable to trigger `onProductSelect(product.id)`. No individual buttons may be rendered directly on the card surface.
   - **Data Mapping**:
     - Check `product.title`. If it's missing, undefined, or empty, fallback to render `product.name`.
-    - Price is stored in cents. Always devide the interger value by 100 to extract a formatted decimal text string containing the currency symbol format (e.g. USD -> `$10.00`, THB -> `฿10.00`).
+    - Price is stored in cents. Always divide the integer value by 100 to extract a formatted decimal text string containing the currency symbol format (e.g. USD -> `$10.00`, THB -> `฿10.00`).
     - Append a minor structural description section wrapper displaying a shortened paragraph preview snippet of the product.description string beneath the title layout frame.
   - **Top-Right Corner Badge**:
     - If `product.state === inactive`, render a prominent visual badge containing `translations['status.coming_soon']` backed by a distinct background overlay color.
   - **Image Footer Banner**:
     If `product.available === 0`, render a banner layout spanning accross the bottom baseline boundary of the image containing `translations['status.unavailable']` backed by a distinct background overlay color.
+  - On user click interaction, execute the following execution sequentially:
+    * **Step A: Data Fetching**:
+      - Leave a component event handler skeleton. Full integration will be handled in a later task.
+    * **Step B: Modal Presentation**:
+      - **Desktop viewport**: Component must split into two distinct horizontal sides. The left side handles centered product pictures. The right side vertically stacks a fixed header zone (product name, price, available amount), a flexible middle zone for the scrolling description, and a fixed footer zone (quantity selector row and add-to-cart).
+      - **Mobile viewport**: Component must pivot to a single column, stacking elements from top to bottom (images on top, product details underneath) while rigidly respecting the global fixed modal height constraint.
+    * **Step C: Quantity Selector Row**:
+      - Render a centered inline row containing exactly three interactive elements:
+        - `[-] Button`: Decrements the active item purchase quantity.
+        - `[Quantity Counter] Form Input`: Display the current local count state. Allow user to update the number count directly.
+        - `[+] Button`: Increments the active item purchase quantity.
+    * **Step D: Add-To-Cart Button**:
+      - Render an `[Add to Cart] in English or [เพิ่มสินค้าลงตะกร้า] in Thai` submission button positioned explicitly for easy buttom access on mobile viewports.
+      - **Constraints**:
+        - If `state` is `inactive` or `available` is equal to 0, immediately disable this action button.
+      - Currently, this button has **no action/side effects**. Leave a component event handler skeleton. Full integration will be habdled in a later task.
 
 ### 9. Core Landing Page Layout Assembly (src/pages/Landing.tsx)
 - Create the primary landing page view tree using the components built in the previous steps
@@ -149,5 +165,11 @@ Generate the layout for the e-commerce landing page and components using React, 
 - **Grid Placement**: Pass `MOCK_PRODUCTS` into the <ProductGrid /> component beneath the hero area.
 
 ## 🏁 Task Verification Requirements
-- Run local compilation verification scripts via `npm run build` to guarantee zero TypeScript or build errors exist.
-- Edit `tasks/manifest.json`, switch the status value for Task 02 from "pending" to "completed", and stop.
+You are strictly required to execute the following verification steps and terminal operations sequentially from top to bottom before closing this task:
+* **Verify Branding**: Check that `/branding/BRANDING.md` exists exactly at that path and matches the token mapping completely.
+* **Verify Tailwind**: Ensure `src/index.css` successfully compiles without any unexpected syntax parser errors.
+* **Run Linting**: Execute `npm run lint` in your terminal and fix any style errors immediately.
+* **Run Build**: Execute `npm run build` in your terminal to ensure the codebase compiles with zero errors.
+* **Error Loop**: If linting or build fails, fix the code and repeat the tests. Do not mark the task complete if a check fails.
+* **Manifest Handshake**: Once all tests pass, open `tasks/manifest.json` and change this task's status from "pending" to "completed".
+* **Log Progress**: Append a brief summary of your changes to the top of `PROGRESS.md` using the format in `AGENTS.md`, then stop.

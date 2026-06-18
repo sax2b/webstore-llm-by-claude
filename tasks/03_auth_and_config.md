@@ -2,6 +2,8 @@
 
 ## 🎯 Objective
 
+Initialize the application session and fetch storefront configurations on initial application boot (or hard refresh). Once loaded, this state is preserved in memory and shared globally, allowing instant client-side page transitions without redundant network requests or UI blocking.
+
 ## 📁 Connected References
 
 - `AGENTS.md`
@@ -86,15 +88,15 @@
 - Commit the retrieved shop config to state, passing it straight down to the runtime `<ShopProvider />` layer.
 - Render `<LoadingIndicator fullPage />` (`src/components/LoadingIndicator.tsx`) during initial system hydration.
 
-### 5. List Product API (`src/api/api.ts`)
-- Create a function, called `ListProducts()`, to fetch list of current products under shop ID: `GET /shops/{shop_id}/products?lang=<current_lang>`.
-- See API response in `docs/openapi/guest/openapi.yaml`
-- Load `current_lang` from `localStorage` under the `lang` key.
-
-### 6. Synchronize Landing Page Data (`src/pages/Landing.tsx`)
-- Fetch products using `ListProducts()` in `src/api/api.ts`.
-- Integrate the pre-existing Landing Page layout with live shop configuration from the contexy layout and products on component layout execution.
+### 5. Synchronize Landing Page Data (`src/pages/Landing.tsx`)
+- Integrate the pre-existing Landing Page layout with live shop configuration from the context layout.
 
 ## 🏁 Task Verification Requirements
-- Run local compilation verification scripts via `npm run build` to guarantee zero TypeScript or build errors exist.
-- Edit `tasks/manifest.json`, switch the status value for Task 03 from "pending" to "completed", and stop.
+You are strictly required to execute the following verification steps and terminal operations sequentially from top to bottom before closing this task:
+* **Verify Branding**: Check that `/branding/BRANDING.md` exists exactly at that path and matches the token mapping completely.
+* **Verify Tailwind**: Ensure `src/index.css` successfully compiles without any unexpected syntax parser errors.
+* **Run Linting**: Execute `npm run lint` in your terminal and fix any style errors immediately.
+* **Run Build**: Execute `npm run build` in your terminal to ensure the codebase compiles with zero errors.
+* **Error Loop**: If linting or build fails, fix the code and repeat the tests. Do not mark the task complete if a check fails.
+* **Manifest Handshake**: Once all tests pass, open `tasks/manifest.json` and change this task's status from "pending" to "completed".
+* **Log Progress**: Append a brief summary of your changes to the top of `PROGRESS.md` using the format in `AGENTS.md`, then stop.

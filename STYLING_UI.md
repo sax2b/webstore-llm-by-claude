@@ -7,10 +7,11 @@
 *   **DO** design for mobile phones first. Test that elements stack nicely and do not break on small screens (320px wide).
 *   **DO** make your background colors and layouts stretch 100% wide (`w-full`). Only restrict container widths (`max-w-...`) when making readable blocks of text.
 *   **DO** add smooth transitions and animations where appropriate:
-    - Use `transition-all`, `transition-colors`, `transition-opacity` for hover states
-    - Use `animate-fade-in`, `animate-pulse`, `animate-bounce` for engaging UI elements
-    - Add `hover:scale-105` or `hover:scale-110` for interactive elements
-    - Use `transform` and transition utilities for smooth interactions
+    - Use `transition-all`, `transition-colors`, `transition-opacity` for hover states.
+    - Use `animate-fade-in`, `animate-pulse`, `animate-bounce` for engaging UI elements.
+    - Add `hover:scale-105` or `hover:scale-110` for interactive elements.
+    - Add `cursor-pointer` for clickable buttons.
+    - Use `transform` and transition utilities for smooth interactions.
 *   **DO** combine Tailwind utilities rather than writing custom CSS.
 
 ## DON'Ts

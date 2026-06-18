@@ -3,7 +3,11 @@
   "task_directory": "tasks/",
   "execution_sequence": [
     { "id": "01_branding", "file": "01_branding.md", "status": "pending", "depends_on": [""] },
-    { "id": "02_landingpage", "file": "02_landingpage.md", "status": "pending", "depends_on": ["01_branding"] },
-    { "id": "03_auth_and_config", "file": "03_auth_and_config.md", "status": "pending", "depends_on": ["02_landingpage"] }
+    { "id": "02_landing_page", "file": "02_landing_page.md", "status": "pending", "depends_on": ["01_branding"] },
+    { "id": "03_auth_and_config", "file": "03_auth_and_config.md", "status": "pending", "depends_on": ["02_landing_page"] },
+    { "id": "04_landing_page_integration", "file": "04_landing_page_integration.md", "status": "pending", "depends_on": ["03_auth_and_config"] },
+    { "id": "05_cart_page", "file": "05_cart_page.md", "status": "pending", "depends_on": ["04_landing_page_integration"] },
+    { "id": "06_cart_subviews", "file": "06_cart_subviews.md", "status": "pending", "depends_on": ["05_cart_page"] },
+    { "id": "07_order_view", "file": "07_order_view.md", "status": "pending", "depends_on": ["06_cart_subviews"] }
   ]
 }

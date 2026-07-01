@@ -6,22 +6,22 @@ Ingest design system tokens from your workspace configuration tracking files, cr
 
 ## 📁 Connected References
 
-- `CODING_STANDARD.md`
-- `AGENTS.md`
+*   `CODING_STANDARD.md`
+*   `AGENTS.md`
 
 ---
 
 ## 🧱 Implementation Requirements & Steps
 
 ### 1. Ingest Active Configuration File Profile
-- Look inside your project root for design parameters using this explicit checklist priority loop:
+*   Look inside your project root for design parameters using this explicit checklist priority loop:
   1. Scan for **`branding/branding.json`** (Web-scraped design system priority target).
   2. If missing, look for and ingest **`branding/default.json`** to serve as the structural fallback profile.
-- Whichever profile file matches, treat those specific values as your absolute configuration source of truth for the steps below.
+*   Whichever profile file matches, treat those specific values as your absolute configuration source of truth for the steps below.
 
 ### 2. Generate BRANDING.md (Strict Formatting Guide)
-- Read the active parameters from your target JSON layout configurations.
-- Create or completely overwrite **`branding/BRANDING.md`** (Ensure it is nested inside the `branding/` directory in uppercase to comply with downstream task dependencies). The agent must format the markdown output to match this exact template layout structural format:
+*   Read the active parameters from your target JSON layout configurations.
+*   Create or completely overwrite **`branding/BRANDING.md`** (Ensure it is nested inside the `branding/` directory in uppercase to comply with downstream task dependencies). The agent must format the markdown output to match this exact template layout structural format:
 
 ```markdown
 # BRANDING.md
@@ -80,45 +80,45 @@ ASSETS:
 ```
 
 ### 3. Inject Style Palette Layout directly into CSS Layers
-- Open the single workspace styling asset located precisely at: src/index.css.
-- Preserve the top @tailwind directives exactly as they stand.
-- Underneath the base directives, update or inject a global styling block mapping the ingested configuration fields using standard, explicit Tailwind @layer base modifiers to avoid layout-breaking custom style flags:
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+*   Open the single workspace styling asset located precisely at: src/index.css.
+*   Preserve the top @tailwind directives exactly as they stand.
+*   Underneath the base directives, update or inject a global styling block mapping the ingested configuration fields using standard, explicit Tailwind @layer base modifiers to avoid layout-breaking custom style flags:
+    ```css
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
 
-@layer base {
-  /* Inject Ingested Color Palette Tokens and Global Typography Variables */
-  body {
-    font-family: [Insert comma separated Font Stack (Body) value here, e.g., 'Noto Sans Thai Looped', sans-serif];
-    font-size: [Insert Body Size string value here, e.g., 16px];
-    background-color: [Insert Background HEX string here, e.g., #F5F5F5];
-    color: [Insert Text Primary HEX string here, e.g., #2C2C2C];
-    -webkit-font-smoothing: antialiased;
-  }
+    @layer base {
+    /* Inject Ingested Color Palette Tokens and Global Typography Variables */
+    body {
+        font-family: [Insert comma separated Font Stack (Body) value here, e.g., 'Noto Sans Thai Looped', sans-serif];
+        font-size: [Insert Body Size string value here, e.g., 16px];
+        background-color: [Insert Background HEX string here, e.g., #F5F5F5];
+        color: [Insert Text Primary HEX string here, e.g., #2C2C2C];
+        -webkit-font-smoothing: antialiased;
+    }
 
-  /* Lock Header Layout Text Scalings Strictly to User Specification Mapping */
-  h1 {
-    font-family: [Insert comma separated Font Stack (Heading) value here];
-    font-size: [Insert H1 Size string value here, e.g., 36px];
-    font-weight: 700;
-  }
+    /* Lock Header Layout Text Scalings Strictly to User Specification Mapping */
+    h1 {
+        font-family: [Insert comma separated Font Stack (Heading) value here];
+        font-size: [Insert H1 Size string value here, e.g., 36px];
+        font-weight: 700;
+    }
 
-  h2 {
-    font-family: [Insert comma separated Font Stack (Heading) value here];
-    font-size: [Insert H2 Size string value here, e.g., 30px];
-    font-weight: 700;
-  }
-}
-```
+    h2 {
+        font-family: [Insert comma separated Font Stack (Heading) value here];
+        font-size: [Insert H2 Size string value here, e.g., 30px];
+        font-weight: 700;
+    }
+    }
+    ```
 
 ## 🏁 Task Verification Requirements
 You are strictly required to execute the following verification steps and terminal operations sequentially from top to bottom before closing this task:
-* **Verify Branding**: Check that `/branding/BRANDING.md` exists exactly at that path and matches the token mapping completely.
-* **Verify Tailwind**: Ensure `src/index.css` successfully compiles without any unexpected syntax parser errors.
-* **Run Linting**: Execute `npm run lint` in your terminal and fix any style errors immediately.
-* **Run Build**: Execute `npm run build` in your terminal to ensure the codebase compiles with zero errors.
-* **Error Loop**: If linting or build fails, fix the code and repeat the tests. Do not mark the task complete if a check fails.
-* **Manifest Handshake**: Once all tests pass, open `tasks/manifest.json` and change this task's status from "pending" to "completed".
-* **Log Progress**: Append a brief summary of your changes to the top of `PROGRESS.md` using the format in `AGENTS.md`, then stop.
+*   **Verify Branding**: Check that `/branding/BRANDING.md` exists exactly at that path and matches the token mapping completely.
+*   **Verify Tailwind**: Ensure `src/index.css` successfully compiles without any unexpected syntax parser errors.
+*   **Run Linting**: Execute `npm run lint` in your terminal and fix any style errors immediately.
+*   **Run Build**: Execute `npm run build` in your terminal to ensure the codebase compiles with zero errors.
+*   **Error Loop**: If linting or build fails, fix the code and repeat the tests. Do not mark the task complete if a check fails.
+*   **Manifest Handshake**: Once all tests pass, open `tasks/manifest.json` and change this task's status from "pending" to "completed".
+*   **Log Progress**: Append a brief summary of your changes to the top of `PROGRESS.md` using the format in `AGENTS.md`, then stop.

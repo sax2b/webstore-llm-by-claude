@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: noto-sans-thai-looped, sans-serif;
+    font-size: 18px;
+    background-color: #F5F5F5;
+    color: #2C2C2C;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1 {
+    font-family: noto-sans-thai-looped, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-family: noto-sans-thai-looped, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+  }
+}

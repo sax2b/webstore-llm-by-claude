@@ -9,7 +9,7 @@ interface LoadingIndicatorProps {
 const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({ text, fullPage = false }) => {
   const content = (
     <div className="flex flex-col items-center justify-center gap-4 animate-fade-in">
-      <Loader2 className="w-8 h-8 text-[#1E88E5] animate-spin" />
+      <Loader2 className="text-[#1E88E5] animate-spin" />
       {text && <p className="text-[#2C2C2C] font-medium">{text}</p>}
     </div>
   );

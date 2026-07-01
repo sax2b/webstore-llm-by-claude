@@ -2,7 +2,7 @@
 
 ## OBJECTIVE
 1. Read the specified target files to gain exact context.
-2. [Insert a core task here]
+2. Read tasks/07_order_view.md and re-implement horiz.
 
 ## TARGET FILES TO READ FIRST
 * `INCREMENTAL_CHANGES.md`

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, Navigate } from 'react-router-dom';
+import { useSearchParams, Navigate, useLocation } from 'react-router-dom';
 import LoadingIndicator from '../components/LoadingIndicator';
 import OrderView from '../components/OrderView';
 import { useCart } from '../context/CartContext';
@@ -12,17 +12,19 @@ interface CompleteProps {
 
 const Complete: React.FC<CompleteProps> = ({ translations }) => {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const { setHideNav } = useCart();
 
   const emailParam = searchParams.get('e');
   const orderParam = searchParams.get('o');
   const hasParams = !!emailParam && !!orderParam;
 
-  const [order, setOrder] = useState<OrderExtra | null>(null);
-  const [loading, setLoading] = useState(hasParams);
+  const prefetchedOrder = (location.state as { order?: OrderExtra } | null)?.order ?? null;
+  const [order, setOrder] = useState<OrderExtra | null>(prefetchedOrder);
+  const [loading, setLoading] = useState(hasParams && !prefetchedOrder);
 
   useEffect(() => {
-    if (!hasParams) return;
+    if (!hasParams || prefetchedOrder) return;
     setHideNav(true);
     GetOrder(emailParam!, orderParam!)
       .then((data) => {
@@ -33,7 +35,13 @@ const Complete: React.FC<CompleteProps> = ({ translations }) => {
         setLoading(false);
       });
     return () => setHideNav(false);
-  }, [emailParam, orderParam, hasParams, setHideNav]);
+  }, [emailParam, orderParam, hasParams, prefetchedOrder, setHideNav]);
+
+  useEffect(() => {
+    if (!prefetchedOrder) return;
+    setHideNav(true);
+    return () => setHideNav(false);
+  }, [prefetchedOrder, setHideNav]);
 
   if (!hasParams) return <Navigate to="/order" replace />;
   if (loading) return <LoadingIndicator fullPage />;

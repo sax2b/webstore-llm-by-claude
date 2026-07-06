@@ -114,9 +114,10 @@ Generate the layout for the order view, order page and related components.
     *   Render Order View using previously loaded order data.
 *   **IF** order data is assigned, render Order View immediately. Don't need to fetch data again.
 
-### 7. Order Page Assembly(`src/pages/Order.ts`)
+### 7. Order Page Assembly (`src/pages/Order.ts`)
 *   Router Path: `/order`
 *   **Layout**:
+    *   **Header Placement**: Import and mount the `<Header />` right at the top of the viewport layout.
     *   **Header Section**: Render both texts labeled via `translations[order.search_title]` and `translations[order.search_description]` vertically in the center.
     *   **Information Section**: Implement three consecutive text input fields with labels placed directly above each input. The fields must be:
         *   email (Type: text, Label: `translations['order.search_input.email']`).

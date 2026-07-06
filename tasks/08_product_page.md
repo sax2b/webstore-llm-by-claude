@@ -32,16 +32,28 @@ Generate the layout for the product page and related components.
     *   **Header**: Render a text element displaying the localized message string from `translations['product.header']`.
     *   **Grid Placement**: Render `<ProductGrid>` component and integrate it with fetched products.
 
-### 3. Global Persistent Footer Menu (`src/components/BottomNavigation.tsx`)
-- Implement a bottom navigation bar rendering exactly layout options sequentially. **This component must be completely hidden on desktop and larger viewports**.
-- Each tab element maps explicitly to the active router paths:
+### 3. Shared Navigation Config (`src/components/NavConfig.ts`)
+*   Define and export a single ordered array of nav items, used as the source of truth for both Section 4 and Section 5. Do not duplicate this list elsewhere.
 
-| Sequence index | Translation Key Reference | Default Label Graphic Link | Target Path Route |
+| Index | Translation Key | Icon | Route |
 | :--- | :--- | :--- | :--- |
-| 1 | `nav.shop` | Marketplace Home icon | `/` |
+| 1 | `nav.shop` | Home icon | `/` |
 | 2 | `nav.product` | Product icon | `/products` |
-| 3 | `nav.cart` | Shopping Cart layout icon | `/cart` |
-| 4 | `nav.order` | Order layout icon | `/order` |
+| 3 | `nav.cart` | Cart icon | `/cart` |
+| 4 | `nav.order` | Order icon | `/order` |
+
+### 4. Mobile Bottom Navigation (`src/components/BottomNavigation.tsx`)
+*   Import the nav item list from `NavConfig.ts`. Do not redefine it inline.
+*   Render exactly the 4 items from `NavConfig.ts`, in order, as icon + localized label pairs.
+*   Each tab element maps explicitly to the active router paths.
+*   **Constraint**: Hidden in the desktop and larger viewports.
+
+### 5. Desktop Navigation (`src/components/Header.tsx`)
+*   Import the same nav item list from `NavConfig.ts`, filtered to exclude the `/` route (index 1).
+*   Render the remaining items horizontally, centered within the header row.
+*   If `Header.tsx` already contains other elements (logo, language selector, etc.), preserve them — insert this nav block without removing or repositioning existing content, using flex layout so the nav sits centered between whatever exists on either side.
+*   **Constraint**: Hidden in the mobile and smaller viewports.
+
 
 ## 🏁 Task Verification Requirements
 You are strictly required to execute the following verification steps and terminal operations sequentially from top to bottom before closing this task:

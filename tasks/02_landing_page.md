@@ -165,13 +165,16 @@ Generate the layout for the e-commerce landing page and components using React, 
 ### 11. Core Landing Page Layout Assembly (src/pages/Landing.tsx)
 *   Create the primary landing page view tree using the components built in the previous steps
 *   **Header Placement**: Import and mount the `<Header />` right at the top of the viewport layout.
-*   **Hero Banner Area**: Below the navbar, build a full-width banner block. Brand Rule Apply: Background fills, padding blocks, and text alignment rules must match the global page header template styles from the guide.
-    *   Example Layout Structure: `w-full bg-gray-50 py-12 px-6 mb-6 text-center`
-    *   Render the localized title using: `translations['hero.title']`.
-    *   Render the localized slogan string using: `translations['hero.slogan']`.
-    *   If `shopConfig.storefront_background_image_url` is present, render it dynamically as the background layer behind the hero banner block wrapper.
+*   **Hero Banner Area**: Below the navbar, build a full-bleed hero banner block occupying the full viewport height (or near-full, e.g. `min-h-screen`).
+    *   **Background**: If `shopConfig.storefront_background_image_url` is present, render it as a full-cover background layer (`bg-cover bg-center`) behind the entire hero block. Apply a dark gradient overlay (transparent → semi-transparent black toward the bottom) on top of the image to preserve text legibility.
+    *   **Content Positioning**: All hero content must be horizontally centered at every viewport width — mobile and desktop share the same centering behavior, no left/right alignment shifts on resize.
+    *   **Brand Block**: Positioned in the upper-to-middle portion of the hero, stacked vertically and centered:
+        *   Localized title using `translations['hero.title']` as the large, primary focal text of the hero — centered horizontally, positioned below the brand block with generous spacing. Font size should scale responsively (larger on desktop, smaller on mobile).
+        *   Localized slogan/brand name using `translations['hero.slogan']`
+        *   **Scroll-to-Products Control**: Render a small clickable chevron-down icon button, absolutely positioned at the bottom-center of the hero block white/light color, with a subtle bounce or fade animation. On click, smooth-scroll the viewport down to the Products placement.
+        *   **Example Layout Structure**: `relative w-full min-h-screen flex flex-col items-center justify-center text-center text-white` for the content wrapper, with the background image/overlay as absolutely-positioned layers behind it (`absolute inset-0 bg-cover bg-center` + `absolute inset-0 bg-gradient-to-b from-transparent to-black/60`).
 *   **Products Placement**:
-    *   **Header**: Render a text element displaying the localized message string from `translations['product.header']`.
+    *   **Header**: Render a bold text element displaying the localized message string from `translations['product.header']`.
     *   **Product Grid Placement**: Pass `MOCK_PRODUCTS` into the <ProductGrid /> component beneath the product header.
 
 ## 🏁 Task Verification Requirements

@@ -2,7 +2,7 @@
 
 ## OBJECTIVE
 1. Read the specified target files to gain exact context.
-2. Read tasks/07_order_view.md and re-implement horiz.
+2. When checkout is success and click button to redirect to /, bottom navigation bar does not show
 
 ## TARGET FILES TO READ FIRST
 * `INCREMENTAL_CHANGES.md`

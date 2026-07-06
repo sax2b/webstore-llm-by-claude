@@ -111,6 +111,7 @@ const Item: React.FC<ItemProps> = ({ translations, currentLocale, setCurrentLoca
       <Header
         currentLocale={currentLocale}
         setCurrentLocale={setCurrentLocale}
+        translations={translations}
       />
 
       <button

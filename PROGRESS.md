@@ -1,5 +1,78 @@
 # PROGRESS.md - Agent Progress Record
 
+### ✅ [2026-07-03 03:00] - Bug Fix: Task 02 Step 11 — Hero Brand Block Vertical Position
+* **Task File:** `tasks/02_landing_page.md`
+* **Files Modified:**
+  * `src/pages/Landing.tsx`
+  * `src/components/Header.tsx`
+* **Changes Delivered:**
+  * Updated spec requires the hero's Brand Block to sit in the "upper-to-middle portion" of the hero; implementation had it dead-centered. Changed the hero wrapper from `justify-center` to `justify-start pt-16 md:pt-24` so the title/slogan block renders in the upper-middle band instead of true vertical center, while horizontal centering and the bottom-center scroll chevron remain unchanged.
+  * Fixed a pre-existing `npm run lint` failure in `Header.tsx` (unused `Icon` variable from a commented-out nav icon) blocking verification: uncommented `<Icon className="w-4 h-4" />` in the desktop nav loop.
+  * Verified with npm run lint (no errors) and npm run build (zero errors, built in 3.06s).
+
+### ✅ [2026-07-03 02:00] - Bug Fix: Scroll-to-Products Button Not Visible on Load + Scroll Overlap
+* **Task File:** N/A
+* **Files Modified:**
+  * `src/pages/Landing.tsx`
+* **Changes Delivered:**
+  * Fixed the scroll-to-products chevron being pushed below the fold on first load: outer page wrapper changed to `flex flex-col`, hero wrapper changed from `min-h-screen` to `flex-1` so it fills exactly the viewport height remaining after the sticky `<Header />`'s own rendered height, instead of stacking a full 100vh hero below it.
+  * Fixed the smooth-scroll landing under the sticky header and covering the product title: added `scroll-mt-20` to the `productsRef` section wrapper (native CSS `scroll-margin-top`, honored by `scrollIntoView`).
+  * Verified with npm run lint (no errors) and npm run build (zero errors, built in 2.83s).
+
+### ✅ [2026-07-03 01:00] - Bug Fix: Task 02 Step 11 v2 — Landing Page Hero Spec Update
+* **Task File:** `tasks/02_landing_page.md`
+* **Files Modified:**
+  * `src/pages/Landing.tsx`
+* **Changes Delivered:**
+  * Reordered hero brand block content: `<h1>` title now renders first, `<p>` slogan below it (spec flipped the previous slogan-then-title order).
+  * Removed the centered divider line between slogan and title (no longer in spec).
+  * Added a Scroll-to-Products control: `ChevronDown` icon button absolutely positioned bottom-center of the hero, `animate-bounce`, using the existing `heroTextColor` conditional for visibility on both the image and flat-background states; `onClick` smooth-scrolls to a new `productsRef` attached to the products section wrapper.
+  * Left the full-height hero, gradient overlay, and task 04 API integration (`ListProducts`, `GetCart`) untouched.
+  * Verified with npm run lint (no errors) and npm run build (zero errors, built in 2.87s).
+
+### ✅ [2026-07-03 00:00] - Bug Fix: Task 02 Step 11 — Landing Page Hero Re-implementation
+* **Task File:** `tasks/02_landing_page.md`
+* **Files Modified:**
+  * `src/pages/Landing.tsx`
+* **Changes Delivered:**
+  * Hero section changed from a small padded block to a full-viewport (`min-h-screen`) banner, flex-centered both horizontally and vertically, matching the step 11 spec.
+  * Added a dark gradient overlay (`bg-gradient-to-b from-transparent to-black/60`) rendered alongside the background image when `shopData.storefront_background_image_url` is present.
+  * Added `heroTextColor` conditional: `text-white` when a background image is present, `text-[#2C2C2C]` (branding default) otherwise, applied to the hero content wrapper.
+  * Restructured content into a brand block (slogan + centered divider line) followed by the hero title with generous spacing.
+  * Fixed hero `<h1>` to use explicit responsive sizing (`text-4xl md:text-6xl font-bold`) so it no longer inherits the global base-layer `h1 { font-size: 14px }` override from `src/index.css`.
+  * Left all task 04 API integration (`ListProducts`, `GetCart`, `CartContext` wiring, real product data) untouched.
+  * Verified with npm run lint (no errors) and npm run build (zero errors, built in 2.63s).
+
+### ✅ [2026-07-01 15:00] - Bug Fix: Task 07 Step 7 — Order Page Header + View Order Button API Call
+* **Task File:** `tasks/07_order_view.md`
+* **Files Modified:**
+  * `src/pages/Order.tsx`
+  * `src/pages/Complete.tsx`
+  * `src/App.tsx`
+* **Changes Delivered:**
+  * Added `<Header />` at the top of the Order search form layout; added `currentLocale` and `setCurrentLocale` props to `OrderProps` to support locale switching in the header.
+  * Replaced bare `navigate()` in `handleSearch` with an async `GetOrder()` call: button now shows `<LoadingIndicator />` inline and is disabled while fetching; on success navigates to `/complete` with order data passed via router state.
+  * Updated `App.tsx` `/order` route to pass `currentLocale` and `setCurrentLocale` to `<Order>`.
+  * Updated `Complete.tsx` to read `location.state.order` via `useLocation()` — if order data was passed from the Order page, it skips the redundant `GetOrder()` fetch and renders `<OrderView>` immediately.
+  * Verified with npm run lint (no errors) and npm run build (zero errors, built in 2.50s).
+
+### ✅ [2026-07-01 14:00] - Bug Fix: Task 08 Steps 3-5 — NavConfig, BottomNavigation Refactor, Desktop Header Nav
+* **Task File:** `tasks/08_product_page.md`
+* **Files Modified:**
+  * `src/components/BottomNavigation.tsx`
+  * `src/components/Header.tsx`
+  * `src/pages/Landing.tsx`
+  * `src/pages/Products.tsx`
+  * `src/pages/Item.tsx`
+* **Files Created:**
+  * `src/components/NavConfig.ts`
+* **Changes Delivered:**
+  * Created `src/components/NavConfig.ts` exporting `NavItem` interface and `NAV_ITEMS` array (4 items: Shop/Products/Cart/Order) as the single source of truth for navigation.
+  * Refactored `BottomNavigation.tsx` to import `NAV_ITEMS` from NavConfig and remove its inline `tabs` array and duplicate icon imports.
+  * Updated `Header.tsx` to add `translations` prop, import `NAV_ITEMS` and `useLocation`, and render a desktop-only (`hidden md:flex`) centered nav block between the shop name and right-side controls showing Products, Cart, and Order links with active-state highlighting.
+  * Added `translations={translations}` prop to `<Header>` call sites in Landing.tsx, Products.tsx, and Item.tsx.
+  * Verified with npm run lint (no errors) and npm run build (zero errors, built in 2.55s).
+
 ### ✅ [2026-07-01 12:00] - Implemented Product Page and Extended Bottom Navigation
 * **Task File:** `tasks/08_product_page.md`
 * **Files Modified:**

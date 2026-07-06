@@ -47,6 +47,7 @@ const Products: React.FC<ProductsProps> = ({ translations, currentLocale, setCur
       <Header
         currentLocale={currentLocale}
         setCurrentLocale={setCurrentLocale}
+        translations={translations}
       />
       <div className="px-4 pb-20 pt-6 max-w-7xl mx-auto">
         <h2 className="text-[#2C2C2C] font-bold mb-4">

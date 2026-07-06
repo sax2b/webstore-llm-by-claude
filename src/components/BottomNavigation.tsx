@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ShoppingBag, Package, ShoppingCart, ClipboardList } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { NAV_ITEMS } from './NavConfig';
 
 interface BottomNavigationProps {
   translations: Record<string, string>;
@@ -14,17 +14,10 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ translations }) => 
 
   if (hideNav) return null;
 
-  const tabs = [
-    { path: '/', icon: ShoppingBag, label: translations['nav.shop'] },
-    { path: '/products', icon: Package, label: translations['nav.product'] },
-    { path: '/cart', icon: ShoppingCart, label: translations['nav.cart'] },
-    { path: '/order', icon: ClipboardList, label: translations['nav.order'] },
-  ];
-
   return (
     <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 h-14 bg-white border-t border-gray-200">
       <div className="flex justify-around items-center h-full">
-        {tabs.map(({ path, icon: Icon, label }) => {
+        {NAV_ITEMS.map(({ path, icon: Icon, key }) => {
           const active = pathname === path;
           return (
             <button
@@ -35,7 +28,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ translations }) => 
               }`}
             >
               <Icon className="w-5 h-5" />
-              <span className="text-xs font-medium">{label}</span>
+              <span className="text-xs font-medium">{translations[key]}</span>
             </button>
           );
         })}

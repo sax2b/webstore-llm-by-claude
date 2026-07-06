@@ -2,15 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import LoadingIndicator from '../components/LoadingIndicator';
 import OrderView from '../components/OrderView';
+import Header from '../components/Header';
 import { useCart } from '../context/CartContext';
 import { GetOrder } from '../api/api';
 import type { OrderExtra } from '../types/order';
 
 interface OrderProps {
   translations: Record<string, string>;
+  currentLocale: string;
+  setCurrentLocale: (locale: string) => void;
 }
 
-const Order: React.FC<OrderProps> = ({ translations }) => {
+const Order: React.FC<OrderProps> = ({ translations, currentLocale, setCurrentLocale }) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { setHideNav } = useCart();
@@ -23,6 +26,7 @@ const Order: React.FC<OrderProps> = ({ translations }) => {
   const [loading, setLoading] = useState(hasParams);
   const [email, setEmail] = useState('');
   const [orderNumber, setOrderNumber] = useState('');
+  const [busySearch, setBusySearch] = useState(false);
 
   useEffect(() => {
     if (hasParams) {
@@ -50,13 +54,29 @@ const Order: React.FC<OrderProps> = ({ translations }) => {
     );
   }
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!email.trim() || !orderNumber.trim()) return;
-    navigate(`/complete?e=${encodeURIComponent(email.trim())}&o=${encodeURIComponent(orderNumber.trim())}`);
+    setBusySearch(true);
+    try {
+      const data = await GetOrder(email.trim(), orderNumber.trim());
+      navigate(
+        `/complete?e=${encodeURIComponent(email.trim())}&o=${encodeURIComponent(orderNumber.trim())}`,
+        { state: { order: data } }
+      );
+    } catch {
+      // keep form visible, user can retry
+    } finally {
+      setBusySearch(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-[#F5F5F5] pb-14">
+      <Header
+        currentLocale={currentLocale}
+        setCurrentLocale={setCurrentLocale}
+        translations={translations}
+      />
       <div className="max-w-md mx-auto px-4 pt-12">
         <div className="text-center mb-8">
           <h1 className="text-[#2C2C2C] font-bold text-lg mb-2">
@@ -92,10 +112,10 @@ const Order: React.FC<OrderProps> = ({ translations }) => {
           </div>
           <button
             onClick={handleSearch}
-            disabled={!email.trim() || !orderNumber.trim()}
-            className="w-full py-3 rounded-[12px] bg-[#1E88E5] text-white font-semibold text-sm hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!email.trim() || !orderNumber.trim() || busySearch}
+            className="w-full py-3 rounded-[12px] bg-[#1E88E5] text-white font-semibold text-sm hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           >
-            {translations['order.search_btn']}
+            {busySearch ? <LoadingIndicator /> : translations['order.search_btn']}
           </button>
         </div>
       </div>

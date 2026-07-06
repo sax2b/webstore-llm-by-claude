@@ -89,7 +89,13 @@ export default function App() {
           />
           <Route
             path="/order"
-            element={<Order translations={translations} />}
+            element={
+              <Order
+                translations={translations}
+                currentLocale={currentLocale}
+                setCurrentLocale={setCurrentLocale}
+              />
+            }
           />
         </Routes>
         <BottomNavigation translations={translations} />

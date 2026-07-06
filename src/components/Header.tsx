@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ShoppingCart, ChevronDown } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
 import { useCart } from '../context/CartContext';
 import { localeDisplayMap } from '../i18n/i18n';
+import { NAV_ITEMS } from './NavConfig';
 
 interface HeaderProps {
   currentLocale: string;
   setCurrentLocale: (locale: string) => void;
+  translations: Record<string, string>;
 }
 
-const Header: React.FC<HeaderProps> = ({ currentLocale, setCurrentLocale }) => {
+const Header: React.FC<HeaderProps> = ({ currentLocale, setCurrentLocale, translations }) => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { shopData } = useShop();
   const { cartCount } = useCart();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -27,7 +30,7 @@ const Header: React.FC<HeaderProps> = ({ currentLocale, setCurrentLocale }) => {
   );
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 w-full px-4 py-3 flex justify-between items-center">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 w-full px-4 py-3 flex items-center">
       <button
         onClick={() => navigate('/')}
         className="text-lg font-bold text-[#2C2C2C] cursor-pointer hover:text-[#1E88E5] transition-colors"
@@ -35,7 +38,25 @@ const Header: React.FC<HeaderProps> = ({ currentLocale, setCurrentLocale }) => {
         {shopData?.name ?? ''}
       </button>
 
-      <div className="flex items-center space-x-4">
+      <nav className="hidden md:flex flex-1 justify-center items-center gap-6">
+        {NAV_ITEMS.filter((item) => item.path !== '/').map(({ path, key, icon: Icon }) => {
+          const active = pathname === path;
+          return (
+            <button
+              key={path}
+              onClick={() => navigate(path)}
+              className={`flex items-center gap-1.5 text-sm font-medium transition-colors cursor-pointer ${
+                active ? 'text-[#1E88E5]' : 'text-[#2C2C2C] hover:text-[#1E88E5]'
+              }`}
+            >
+              {/* <Icon className="w-4 h-4" /> */}
+              {translations[key]}
+            </button>
+          );
+        })}
+      </nav>
+
+      <div className="ml-auto flex items-center space-x-4">
         <div className="relative">
           <button
             onClick={() => setDropdownOpen((o) => !o)}

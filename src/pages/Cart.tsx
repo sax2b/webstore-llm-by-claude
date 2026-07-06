@@ -61,6 +61,10 @@ const Cart: React.FC<CartProps> = ({ translations }) => {
   };
 
   useEffect(() => {
+    return () => setHideNav(false);
+  }, [setHideNav]);
+
+  useEffect(() => {
     GetCart()
       .then((data) => {
         setCart(data);
@@ -221,7 +225,11 @@ const Cart: React.FC<CartProps> = ({ translations }) => {
                 <button
                   onClick={handleCheckoutClick}
                   disabled={checkoutLoading}
-                  className="w-full py-3 rounded-[12px] bg-[#1E88E5] text-white font-semibold text-sm hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-70 flex items-center justify-center"
+                  className={`w-full py-3 rounded-[12px] font-semibold text-sm transition-all flex items-center justify-center ${
+                    checkoutLoading
+                      ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                      : 'bg-[#1E88E5] text-white hover:opacity-90 cursor-pointer'
+                  }`}
                 >
                   {checkoutLoading ? <LoadingIndicator /> : translations['cart.checkout']}
                 </button>
@@ -253,7 +261,11 @@ const Cart: React.FC<CartProps> = ({ translations }) => {
             <button
               onClick={handleCheckoutClick}
               disabled={checkoutLoading}
-              className="w-full py-3 rounded-[12px] bg-[#1E88E5] text-white font-semibold text-sm hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-70 flex items-center justify-center"
+              className={`w-full py-3 rounded-[12px] font-semibold text-sm transition-all flex items-center justify-center ${
+                checkoutLoading
+                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                  : 'bg-[#1E88E5] text-white hover:opacity-90 cursor-pointer'
+              }`}
             >
               {checkoutLoading ? <LoadingIndicator /> : translations['cart.checkout']}
             </button>
@@ -430,7 +442,11 @@ const Cart: React.FC<CartProps> = ({ translations }) => {
                 <button
                   onClick={handlePlaceOrder}
                   disabled={!canPlaceOrder || orderLoading}
-                  className="w-full py-3 rounded-[12px] bg-[#1E88E5] text-white font-semibold text-sm hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  className={`w-full py-3 rounded-[12px] font-semibold text-sm transition-all flex items-center justify-center ${
+                    !canPlaceOrder || orderLoading
+                      ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                      : 'bg-[#1E88E5] text-white hover:opacity-90 cursor-pointer'
+                  }`}
                 >
                   {orderLoading ? <LoadingIndicator /> : translations['checkout.place_order_btn']}
                 </button>
@@ -463,7 +479,11 @@ const Cart: React.FC<CartProps> = ({ translations }) => {
           <button
             onClick={handlePlaceOrder}
             disabled={!canPlaceOrder || orderLoading}
-            className="w-full py-3 rounded-[12px] bg-[#1E88E5] text-white font-semibold text-sm hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            className={`w-full py-3 rounded-[12px] font-semibold text-sm transition-all flex items-center justify-center ${
+              !canPlaceOrder || orderLoading
+                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                : 'bg-[#1E88E5] text-white hover:opacity-90 cursor-pointer'
+            }`}
           >
             {orderLoading ? <LoadingIndicator /> : translations['checkout.place_order_btn']}
           </button>
@@ -538,7 +558,11 @@ const Cart: React.FC<CartProps> = ({ translations }) => {
           <button
             onClick={handleSave}
             disabled={saveLoading}
-            className="w-full py-3 rounded-[12px] bg-[#1E88E5] text-white font-semibold text-sm hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-70 flex items-center justify-center"
+            className={`w-full py-3 rounded-[12px] font-semibold text-sm transition-all flex items-center justify-center ${
+              saveLoading
+                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                : 'bg-[#1E88E5] text-white hover:opacity-90 cursor-pointer'
+            }`}
           >
             {saveLoading ? <LoadingIndicator /> : translations['shipping_info.save_btn']}
           </button>
@@ -550,7 +574,11 @@ const Cart: React.FC<CartProps> = ({ translations }) => {
         <button
           onClick={handleSave}
           disabled={saveLoading}
-          className="w-full py-3 rounded-[12px] bg-[#1E88E5] text-white font-semibold text-sm hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-70 flex items-center justify-center"
+          className={`w-full py-3 rounded-[12px] font-semibold text-sm transition-all flex items-center justify-center ${
+            saveLoading
+              ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              : 'bg-[#1E88E5] text-white hover:opacity-90 cursor-pointer'
+          }`}
         >
           {saveLoading ? <LoadingIndicator /> : translations['shipping_info.save_btn']}
         </button>

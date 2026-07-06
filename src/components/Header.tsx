@@ -39,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({ currentLocale, setCurrentLocale, transl
       </button>
 
       <nav className="hidden md:flex flex-1 justify-center items-center gap-6">
-        {NAV_ITEMS.filter((item) => item.path !== '/').map(({ path, key, icon: Icon }) => {
+        {NAV_ITEMS.filter((item) => item.path !== '/').map(({ path, key }) => {
           const active = pathname === path;
           return (
             <button
